@@ -82,28 +82,23 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-          })
-            .then((meRes: AxiosResponse<IMeSuccessResponse>) => {
-              if (meRes.data.code === 200) {
-                if (meRes.data.payload.payment_type === 'card') {
-                  setPageStep('chooseProtocol');
-                } else {
-                  setPageStep('clouds');
-                }
+          }).then((meRes: AxiosResponse<IMeSuccessResponse>) => {
+            if (meRes.data.code === 200) {
+              if (meRes.data.payload.payment_type === 'card') {
+                setPageStep('chooseProtocol');
+              } else {
+                setPageStep('clouds');
               }
-            })
-            .catch(console.log);
+            }
+          });
 
           return res.data.payload.token;
         }
-
-        // console.log('error', res.data.message);
 
         return null;
       })
       .catch(() => {
         setToken(null);
-        // setError(Error.data.message);
       });
   };
 

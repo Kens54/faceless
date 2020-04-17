@@ -92,8 +92,6 @@ IProps) => {
       password,
     })
       .then((res: AxiosResponse<IRegisterSuccessResponse>) => {
-        console.log(res);
-
         setSending(false);
 
         if (res.data.code === 200) {
@@ -114,18 +112,6 @@ IProps) => {
 
         setToken(null);
       });
-    // .then(token => {
-    //   get('/me', {
-    //     headers: {
-    //       Authorisation: `Bearer ${token}`,
-    //       'Content-Type': 'application/json',
-    //     },
-    //   })
-    //     .then(res => {
-    //       console.log(res.data);
-    //     })
-    //     .catch(console.log);
-    // });
   };
 
   return (

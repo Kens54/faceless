@@ -38,7 +38,7 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
           },
         }).then((res: AxiosResponse<ISuccessMeVpnIdRequest>) => {
           if (res.data.code === 200) {
-            if (res.data.payload.setup_status === 'fgdf') {
+            if (res.data.payload.setup_status === 'started') {
               setPageStep('done');
             } else {
               const retryAfter = res.headers['retry-after'] * 1000;
@@ -46,18 +46,6 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
             }
           }
         });
-
-        // const request = new XMLHttpRequest();
-        // request.open('GET', `/me/vpn/${setupId}`);
-        // request.setRequestHeader('Content-Type', 'application/json');
-        // request.setRequestHeader('Authorization', `Bearer ${token}`);
-        // request.send();
-
-        // request.onload = () => {
-        //   const headers = request.getAllResponseHeaders();
-
-        //   console.log('headers', headers);
-        // };
       }, time);
     },
     [token, setupId, setPageStep],

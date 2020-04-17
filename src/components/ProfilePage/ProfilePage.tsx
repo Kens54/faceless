@@ -31,23 +31,6 @@ const ProfilePage = ({ fullName, email, accountStatus, profile, setProfileData }
       Authorization: `Bearer ${token}`,
     },
   };
-  // useEffect(() => {
-  //   if (token) {
-  //     get('/me', params)
-  //       .then((res: AxiosResponse<IMeSuccessResponse>) => {
-  //         if (res.data.code === 200) {
-  //           setProfileData(res.data.payload);
-  //           console.log(res.data);
-  //         }
-  //         console.log(res);
-  //       })
-  //       .catch((error: AxiosError<IMeFailedResponse>) => {
-  //         console.log(error);
-  //       });
-  //   } else {
-  //     console.log(token);
-  //   }
-  // }, [token, setProfileData]);
 
   useEffect(() => {
     (async function getProfileData() {
@@ -57,60 +40,16 @@ const ProfilePage = ({ fullName, email, accountStatus, profile, setProfileData }
 
           if (res.data.code === 200) {
             setProfileData(res.data.payload);
-            console.log(res.data);
           }
         } catch (error) {
-          try {
-            const tokenRes: AxiosResponse<ISuccessRefreshTokenResponse> = await get('/refresh_token', params);
+          const tokenRes: AxiosResponse<ISuccessRefreshTokenResponse> = await get('/refresh_token', params);
 
-            if (tokenRes.data.code === 200) {
-              setToken(tokenRes.data.payload.token);
-
-              try {
-                const meRes = await get('/me', {
-                  headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${tokenRes.data.payload.token}`,
-                  },
-                });
-
-                console.log(meRes);
-              } catch (efrror) {
-                console.log('efrror', efrror.response);
-              }
-            }
-            console.log('error', error.response);
-          } catch (tokenError) {
-            console.log('Token error', tokenError.response);
+          if (tokenRes.data.code === 200) {
+            setToken(tokenRes.data.payload.token);
           }
         }
       }
     })();
-
-    // if (token) {
-    //   try {
-    //     get('/me', {
-    //       headers: {
-    //         'Content-Type': 'application/json',
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     })
-    //       .then((res: AxiosResponse<IMeSuccessResponse>) => {
-    //         if (res.data.code === 200) {
-    //           setProfileData(res.data.payload);
-    //           console.log(res.data);
-    //         }
-    //         console.log(res);
-    //       })
-    //       .catch((error: AxiosError<IMeFailedResponse>) => {
-    //         console.log(error);
-    //       });
-    //   } else {
-    //     console.log(token);
-    //   }
-    //   } catch (error) {
-
-    //   }
   }, [params, token, setToken, setProfileData]);
 
   if (token === null || profile === null) {
