@@ -1,0 +1,77 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+.title {
+  font-size: 36px;
+  font-weight: 400;
+  color: #1e3f5f;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+}
+
+.description {
+  margin-bottom: 35px;
+  font-size: 18px;
+  font-weight: 300;
+  color: #1e3f5f;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 300px;
+  width: 100%;
+}
+
+.input-container {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.button-container {
+  margin-top: 33px;
+}
+
+.error {
+  margin-bottom: 10px;
+  text-align: center;
+  color: #b72245;
+  font-size: 20px;
+  font-weight: 300;
+  font-style: italic;
+}
+
+.auth-links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.auth-link {
+  font-size: 18px;
+  color: #7dc0d1;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.other-forms-link {
+  margin-top: 30px;
+  font-size: 18px;
+  color: #7dc0d1;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+  }
+}

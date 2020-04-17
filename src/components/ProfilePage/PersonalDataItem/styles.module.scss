@@ -1,0 +1,28 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 30px;
+  padding: 10px 18px;
+  border-bottom: 1px solid #c6cdd4;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333333;
+}
+
+.value {
+  font-size: 16px;
+  color: #333333;
+}
+
+.edit-button {
+  font-size: 16px;
+  text-align: right;
+  color: #7dc0d1;
+  cursor: pointer;
+}
