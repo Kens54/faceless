@@ -2,5 +2,14 @@
   display: flex;
   justify-content: space-between;
   max-width: 919px;
+  min-width: 280px;
   width: 100%;
+
+  & :global(.slick-track) {
+    min-width: 285px;
+
+    @media (max-width: 959px) {
+      min-width: 235px;
+    }
+  }
 }

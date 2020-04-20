@@ -73,8 +73,6 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
 
         if (res.data.code === 200) {
           const { token } = res.data.payload;
-          // setSending(false);
-          // setPageStep('clouds');
           setToken(token);
 
           get('/me', {

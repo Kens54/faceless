@@ -28,8 +28,9 @@ const StartStep = ({ setPageStep }: TProps) => {
     if (token) {
       get('/me', params)
         .then((res: AxiosResponse<IMeSuccessResponse>) => {
+          const data = res.data.payload;
           if (res.data.code === 200) {
-            if (res.data.payload.payment_type === 'card') {
+            if (data.payment_type === 'card' && data.expires_in > 0) {
               setPageStep('chooseProtocol');
             } else {
               setPageStep('plans');

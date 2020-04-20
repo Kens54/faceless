@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 import { get, post } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
 import { ISuccessSetupsResponse } from '@src/types/api/setups';
 import { ISuccessSetupPostRequest } from '@src/types/api/setup-post';
-import { IResponseError } from '@src/types/api/error';
 import { TStep, TSetupId } from '@src/types/reducers/page';
 import Button from '@components/Button';
+import Private from '@components/Private';
 import styles from './styles.module.scss';
 
 interface ISetup {
@@ -35,19 +35,11 @@ const ChooseProtocol = ({ setPageStep, setSetupId }: TProps) => {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
-    })
-      .then((res: AxiosResponse<ISuccessSetupsResponse>) => {
-        if (res.data.code === 200) {
-          setSetups(res.data.payload);
-        }
-      })
-      .catch((error: AxiosError<IResponseError>) => {
-        if (error.response) {
-          if (error.response.data.code === 401) {
-            setPageStep('login');
-          }
-        }
-      });
+    }).then((res: AxiosResponse<ISuccessSetupsResponse>) => {
+      if (res.data.code === 200) {
+        setSetups(res.data.payload);
+      }
+    });
   }, [token, setPageStep]);
 
   const handleChooseCrotocol = (id: number) => {
@@ -75,22 +67,22 @@ const ChooseProtocol = ({ setPageStep, setSetupId }: TProps) => {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <h2 className={styles.title}>Choose protocol</h2>
-      <ul className={styles['buttons-block']}>
-        {setups.map(item => (
-          <li className={styles['button-container']} key={item.id}>
-            <Button text={item.name} style={{ textTransform: 'none' }} onClick={() => handleChooseCrotocol(item.id)} />
-          </li>
-        ))}
-        {/* <li className={styles['button-container']}>
-          <Button text="OpenVPN" style={{ textTransform: 'none' }} />
-        </li>
-        <li className={styles['button-container']}>
-          <Button text="WireGuard" style={{ textTransform: 'none' }} />
-        </li> */}
-      </ul>
-    </div>
+    <Private>
+      <div className={styles.wrapper}>
+        <h2 className={styles.title}>Choose protocol</h2>
+        <ul className={styles['buttons-block']}>
+          {setups.map(item => (
+            <li className={styles['button-container']} key={item.id}>
+              <Button
+                text={item.name}
+                style={{ textTransform: 'none' }}
+                onClick={() => handleChooseCrotocol(item.id)}
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+    </Private>
   );
 };
 

@@ -5,6 +5,7 @@ import { TTariffsDataState } from '@src/types/reducers/api';
 import { ISuccessTariffsResponse } from '@src/types/api/tariffs';
 import { TButtonColor } from '@src/types/components/button';
 import { get } from '@common/fetch';
+import Private from '@components/Private';
 import Plan from './Plan';
 import styles from './styles.module.scss';
 import 'slick-carousel/slick/slick.css';
@@ -45,23 +46,29 @@ const Plans = ({ tariffs, setTariffsData }: TProps) => {
   }
 
   return (
-    <div className={styles.wrapper}>
-      <h2 className={styles.title}>Pricing plans</h2>
-      <div className={styles['plans-list']}>
-        <Slider {...sliderSettings}>
-          {tariffs.map((plan, key) => {
-            const btnColor: TButtonColor = key % 2 === 0 ? 'green' : 'red';
+    <Private>
+      <div className={styles.wrapper}>
+        <h2 className={styles.title}>Pricing plans</h2>
+        <div className={styles['plans-list']}>
+          <Slider {...sliderSettings}>
+            {tariffs.map((plan, key) => {
+              const btnColor: TButtonColor = key % 2 === 0 ? 'green' : 'red';
 
-            return (
-              <Plan key={plan.id} id={plan.id} title="1 week" price={plan.amount} currency={plan.currency} btnColor={btnColor} />
-            );
-          })}
-          {/* <Plan title="1 week" price={7} />
-          <Plan title="1 month" price={25} btnColor="red" />
-          <Plan title="3 month" price={98} /> */}
-        </Slider>
+              return (
+                <Plan
+                  key={plan.id}
+                  id={plan.id}
+                  title="1 week"
+                  price={plan.amount}
+                  currency={plan.currency}
+                  btnColor={btnColor}
+                />
+              );
+            })}
+          </Slider>
+        </div>
       </div>
-    </div>
+    </Private>
   );
 };
 

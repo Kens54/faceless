@@ -1,10 +1,12 @@
 import React, { useRef, useEffect, useCallback } from 'react';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 import lotie from 'lottie-web';
 import { ISuccessMeVpnIdRequest } from '@src/types/api/me-vpn-id';
+import { IResponseError } from '@src/types/api/error';
 import { TSetupId, TStep } from '@src/types/reducers/page';
 import { useToken } from '@hooks/useToken';
 import { get } from '@common/fetch';
+import Private from '@components/Private';
 import styles from './styles.module.scss';
 
 export interface IStateProps {
@@ -36,16 +38,24 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
-        }).then((res: AxiosResponse<ISuccessMeVpnIdRequest>) => {
-          if (res.data.code === 200) {
-            if (res.data.payload.setup_status === 'started') {
-              setPageStep('done');
-            } else {
-              const retryAfter = res.headers['retry-after'] * 1000;
-              getSetupStatus(retryAfter);
+        })
+          .then((res: AxiosResponse<ISuccessMeVpnIdRequest>) => {
+            if (res.data.code === 200) {
+              if (res.data.payload.setup_status === 'started') {
+                setPageStep('done');
+              } else {
+                const retryAfter = res.headers['retry-after'] * 1000;
+                getSetupStatus(retryAfter);
+              }
             }
-          }
-        });
+          })
+          .catch((error: AxiosError<IResponseError>) => {
+            if (error.response) {
+              if (error.response.data.code === 401) {
+                setPageStep('login');
+              }
+            }
+          });
       }, time);
     },
     [token, setupId, setPageStep],
@@ -68,10 +78,12 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
   }, [setupId, getSetupStatus]);
 
   return (
-    <div className={styles.wrapper}>
-      <div ref={loaderRef} className={styles.loader} />
-      <h2 className={styles.title}>Expect installation</h2>
-    </div>
+    <Private>
+      <div className={styles.wrapper}>
+        <div ref={loaderRef} className={styles.loader} />
+        <h2 className={styles.title}>Expect installation</h2>
+      </div>
+    </Private>
   );
 };
 
