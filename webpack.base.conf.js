@@ -18,7 +18,7 @@ module.exports = {
     paths: PATHS,
   },
   entry: {
-    app: `${PATHS.src}/index.tsx`,
+    'set-up': `${PATHS.src}/set-up-page.tsx`,
     profile: `${PATHS.src}/profile-page.tsx`,
   },
   output: {
