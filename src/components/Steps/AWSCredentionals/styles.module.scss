@@ -1,0 +1,21 @@
+.container {
+  padding: 0 15px;
+}
+
+.item-link {
+  color: #7dc0d1;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.example {
+  font-size: 16px;
+  color: #777777;
+
+  @media (max-width: 959px) {
+    font-size: 14px;
+  }
+}

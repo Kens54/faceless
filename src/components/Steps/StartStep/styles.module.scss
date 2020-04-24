@@ -33,3 +33,15 @@
     font-size: 24px;
   }
 }
+
+.loader {
+  width: 217px;
+  height: 217px;
+  margin-bottom: 42px;
+
+  @media (max-width: 959px) {
+    width: 147px;
+    height: 147px;
+    margin-bottom: 30px;
+  }
+}

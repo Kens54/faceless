@@ -16,12 +16,6 @@ const cloudsList: ICloudItem[] = [
   {
     name: 'aws',
   },
-  {
-    name: 'aws1',
-  },
-  {
-    name: 'aws2',
-  },
 ];
 
 const CloudList = () => {
