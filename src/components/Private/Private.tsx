@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
-import { AxiosError } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 import { TStep } from '@src/types/reducers/page';
 import { useToken } from '@hooks/useToken';
 import { get } from '@common/fetch';
+import { ISuccessRefreshTokenResponse } from '@src/types/api/refresh_token';
 import { IResponseError } from '@src/types/api/error';
 
 export interface IActionProps {
@@ -29,8 +30,16 @@ const Private = ({ children, setPageStep }: TProps) => {
       get('/me', params).catch((error: AxiosError<IResponseError>) => {
         if (error.response) {
           if (error.response.data.code === 401) {
-            setPageStep('login');
-            setToken(null);
+            get('/refresh_token', params)
+              .then((res: AxiosResponse<ISuccessRefreshTokenResponse>) => {
+                if (res.data.code === 200) {
+                  setToken(res.data.payload.token);
+                }
+              })
+              .catch(() => {
+                setPageStep('login');
+                setToken(null);
+              });
           }
         }
       });

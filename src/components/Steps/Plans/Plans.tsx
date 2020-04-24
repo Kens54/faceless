@@ -1,8 +1,12 @@
-import React, { useEffect } from 'react';
+import React, {
+  // useState,
+  useEffect,
+} from 'react';
 import { AxiosResponse } from 'axios';
 import Slider from 'react-slick';
 import { TTariffsDataState } from '@src/types/reducers/api';
 import { ISuccessTariffsResponse } from '@src/types/api/tariffs';
+// import { TPage } from '@src/types/routing';
 import { TButtonColor } from '@src/types/components/button';
 import { get } from '@common/fetch';
 import Private from '@components/Private';
@@ -22,6 +26,7 @@ export interface IActionProps {
 type TProps = IStateProps & IActionProps;
 
 const Plans = ({ tariffs, setTariffsData }: TProps) => {
+  // const [redirect, setRedirect] = useState<TPage | null>(null);
   useEffect(() => {
     get('/billing/tariffs').then((res: AxiosResponse<ISuccessTariffsResponse>) => {
       if (res.data.code === 200) {

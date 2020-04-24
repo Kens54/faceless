@@ -5,6 +5,8 @@ import { TApiActions } from '@src/types/actions/api';
 const initialState: IApiState = {
   profile: null,
   tariffs: null,
+  card: null,
+  subscriptions: null,
 };
 
 export const api = (state = initialState, action: TApiActions) => {
@@ -13,6 +15,10 @@ export const api = (state = initialState, action: TApiActions) => {
       return { ...state, profile: action.payload };
     case ApiTypes.SET_TARIFFS:
       return { ...state, tariffs: action.payload };
+    case ApiTypes.SET_CARD_DATA:
+      return { ...state, card: action.payload };
+    case ApiTypes.SET_SUBSCRIPTIONS_DATA:
+      return { ...state, subscriptions: action.payload };
     default:
       return { ...state };
   }

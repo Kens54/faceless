@@ -1,21 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router-dom';
 import { AxiosResponse, AxiosError } from 'axios';
+import { TPage } from '@src/types/routing';
+import { SET_UP_PAGE_PATH } from '@constants/routing';
 import { get } from '@common/fetch';
-import { TStep } from '@src/types/reducers/page';
-import { TProfileDataState } from '@src/types/reducers/api';
 import { IMeSuccessResponse, IMeFailedResponse } from '@src/types/api/me';
 import { useToken } from '@hooks/useToken';
 import Button from '@components/Button';
 import styles from './styles.module.scss';
 
-export interface IActionProps {
-  setPageStep: (step: TStep) => void;
-  setProfileData: (value: TProfileDataState) => void;
-}
-
-type TProps = IActionProps;
-
-const StartStep = ({ setPageStep }: TProps) => {
+const StartStep = () => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const token = useToken()[0];
   const params = {
     headers: {
@@ -31,27 +26,31 @@ const StartStep = ({ setPageStep }: TProps) => {
           const data = res.data.payload;
           if (res.data.code === 200) {
             if (data.payment_type === 'card' && data.expires_in > 0) {
-              setPageStep('chooseProtocol');
+              setRedirect('/choose-protocol');
             } else {
-              setPageStep('plans');
+              setRedirect('/tarrifs');
             }
           }
         })
         .catch((error: AxiosError<IMeFailedResponse>) => {
           if (error.response) {
             if (error.response.data.code !== 401) {
-              setPageStep('clouds');
+              setRedirect('/choose-cloud');
             }
           }
         });
     }
-  }, [token, params, setPageStep]);
+  }, [token, params]);
+
+  if (redirect !== null) {
+    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
+  }
 
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Set up vpn on your server</h2>
       <p className={styles.description}>Online anonymity</p>
-      <Button text="Сhoose cloud" onClick={() => setPageStep('login')} />
+      <Button text="Сhoose cloud" href="/login" type="innerLink" />
     </div>
   );
 };

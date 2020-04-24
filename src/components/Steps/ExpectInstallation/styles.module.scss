@@ -16,6 +16,11 @@
     height: 147px;
     margin-bottom: 30px;
   }
+
+  &--image {
+    background-image: url('../../../assets/img/loader.png');
+    background-size: 100%;
+  }
 }
 
 .title {
@@ -28,5 +33,33 @@
 
   @media (max-width: 959px) {
     font-size: 24px;
+  }
+}
+
+.button-container {
+  margin-top: 100px;
+  margin-bottom: 25px;
+}
+
+.button-content {
+  display: flex;
+  align-items: center;
+}
+
+.retry-icon {
+  width: 30px;
+  height: 34px;
+  margin-right: 16px;
+  background-image: url('../../../assets/img/retry.png');
+  background-size: 100%;
+}
+
+.support-link {
+  font-size: 24px;
+  color: #1e3f5f;
+  text-decoration: underline;
+
+  &:hover {
+    text-decoration: none;
   }
 }

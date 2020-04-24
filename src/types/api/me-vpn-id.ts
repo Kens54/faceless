@@ -5,7 +5,7 @@ export interface ISuccessMeVpnIdRequest {
     id: number;
     last_action: string;
     setup_id: number;
-    setup_status: '' | 'starting' | 'started' | 'stopped';
+    setup_status: '' | 'starting' | 'started' | 'stopped' | 'error';
     updated_at: Date;
     used_our_resources: boolean;
     user_id: number;

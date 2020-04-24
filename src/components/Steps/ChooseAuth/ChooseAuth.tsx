@@ -1,5 +1,10 @@
-import React from 'react';
-import { TChoosedCloud, TStep } from '@src/types/reducers/page';
+import React, { useState } from 'react';
+import { Redirect } from 'react-router-dom';
+import { TChoosedCloud } from '@src/types/reducers/page';
+import { useLocalStorage } from '@hooks/useLocalStorage';
+import { TPage } from '@src/types/routing';
+import { SET_UP_PAGE_PATH } from '@src/constants/routing';
+import { LocalStorageKeys } from '@constants/localStorageKeys';
 import Button from '@components/Button';
 import Private from '@components/Private';
 import styles from './styles.module.scss';
@@ -8,13 +13,17 @@ export interface IStateProps {
   choosedCloud: TChoosedCloud;
 }
 
-export interface IActionProps {
-  setPageStep: (step: TStep) => void;
-}
+type TProps = IStateProps;
 
-type TProps = IStateProps & IActionProps;
+const ChooseAuth = ({ choosedCloud }: TProps) => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
+  const setUseOurRecources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[1];
+  const setCredentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[1];
 
-const ChooseAuth = ({ choosedCloud, setPageStep }: TProps) => {
+  if (redirect !== null) {
+    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
+  }
+
   return (
     <Private>
       <div className={styles.wrapper}>
@@ -23,26 +32,18 @@ const ChooseAuth = ({ choosedCloud, setPageStep }: TProps) => {
         </div>
         <div className={styles['buttons-block']}>
           <div className={styles['button-container']}>
-            <Button
-              text="Login"
-              onClick={() => {
-                // setPageStep('login');
-              }}
-            />
+            <Button type="innerLink" text="Login" href="/aws-credentials" />
           </div>
           <div className={styles['button-container']}>
-            <Button
-              text="Sign up"
-              onClick={() => {
-                // setPageStep('register');
-              }}
-            />
+            <Button type="innerLink" text="Sign up" href="/aws-credentials" />
           </div>
           <div className={styles['button-container']}>
             <Button
               text="Buy with Faceless"
               onClick={() => {
-                setPageStep('plans');
+                setUseOurRecources(true);
+                setCredentionals(null);
+                setRedirect('/tarrifs');
               }}
             />
           </div>

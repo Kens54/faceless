@@ -25,7 +25,40 @@ export interface ITariffsDataItem {
 
 export type TTariffsDataState = ITariffsDataItem[] | null;
 
+export interface ICard {
+  card_expiry_month: number;
+  card_expiry_year: number;
+  card_holder: string;
+  card_number: string;
+  currency: string;
+}
+
+export type TCardState = ICard | null;
+
+export interface ISubscription {
+  created_at: Date;
+  expired_at: Date;
+  is_active: true;
+  started_at: Date;
+  tariff: {
+    amount: number;
+    created_at: Date;
+    currency: 'CNY';
+    description: string;
+    frequency: 'daily';
+    id: number;
+    interval: number;
+    name: string;
+    updated_at: Date;
+  };
+  updated_at: Date;
+}
+
+export type TSubscriptionsState = ISubscription[] | null;
+
 export interface IApiState {
   profile: TProfileDataState;
   tariffs: TTariffsDataState;
+  card: TCardState;
+  subscriptions: TSubscriptionsState;
 }

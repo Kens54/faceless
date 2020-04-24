@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/loginForm';
+import { SET_UP_PAGE_PATH } from '@constants/routing';
 import { IRegisterSuccessResponse } from '@src/types/api/register';
 import { IMeSuccessResponse } from '@src/types/api/me';
 import { get, post } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
 import Input from '@components/Input';
 import Button from '@components/Button';
-import { TStep } from '@src/types/reducers/page';
+import { TPage } from '@src/types/routing';
 import styles from '@components/Form/styles.module.scss';
 
 export interface IStateProps {
@@ -21,7 +23,6 @@ export interface IActionProps {
   onChangeInputValue: (field: TInputField, value: TFieldValue) => void;
   setError: (value: TErrorValue) => void;
   setSending: (value: boolean) => void;
-  setPageStep: (step: TStep) => void;
 }
 
 type IProps = IStateProps & IActionProps;
@@ -32,7 +33,8 @@ interface IValidation {
   };
 }
 
-const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSending, setPageStep }: IProps) => {
+const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSending }: IProps) => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const setToken = useToken()[1];
 
   const validation: IValidation = {
@@ -83,9 +85,9 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
           }).then((meRes: AxiosResponse<IMeSuccessResponse>) => {
             if (meRes.data.code === 200) {
               if (meRes.data.payload.payment_type === 'card') {
-                setPageStep('chooseProtocol');
+                setRedirect('/choose-protocol');
               } else {
-                setPageStep('clouds');
+                setRedirect('/choose-cloud');
               }
             }
           });
@@ -99,6 +101,10 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
         setToken(null);
       });
   };
+
+  if (redirect !== null) {
+    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -130,9 +136,9 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
         <div className={styles['button-container']}>
           <Button text="next" onClick={handleSubmit} disabled={!email || !password} />
         </div>
-        <button type="button" className={styles['other-forms-link']} onClick={() => setPageStep('register')}>
+        <Link className={styles['other-forms-link']} to={`${SET_UP_PAGE_PATH}/register`}>
           Not registered yet? Sign up
-        </button>
+        </Link>
       </div>
     </div>
   );

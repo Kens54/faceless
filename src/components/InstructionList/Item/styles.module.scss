@@ -1,0 +1,35 @@
+.item {
+  display: flex;
+  margin-bottom: 17px;
+}
+
+.number {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 42px;
+  height: 42px;
+  margin-right: 14px;
+  font-size: 28px;
+  line-height: 1;
+  color: #ffffff;
+  background-color: #7dc0d1;
+  border-radius: 50%;
+
+  @media (max-width: 959px) {
+    width: 34px;
+    height: 34px;
+    font-size: 20px;
+  }
+}
+
+.content {
+  margin-top: 7px;
+  font-size: 24px;
+  color: #1e3f5f;
+
+  @media (max-width: 959px) {
+    font-size: 18px;
+  }
+}

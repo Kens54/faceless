@@ -1,11 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import CSS from 'csstype';
 import { TButtonColor, TButtonType } from '@src/types/components/button';
+import { SET_UP_PAGE_PATH } from '@src/constants/routing';
 import styles from './styles.module.scss';
 
 interface IComponentProps {
-  text: string;
+  text: string | React.ReactNode;
   color?: TButtonColor;
   type?: TButtonType;
   disabled?: boolean;
@@ -32,6 +34,14 @@ const Button = ({
       <a className={buttonClasses} href={href} onClick={onClick} style={style}>
         {text}
       </a>
+    );
+  }
+
+  if (type === 'innerLink') {
+    return (
+      <Link className={buttonClasses} to={`${SET_UP_PAGE_PATH}${href}`} style={style} onClick={onClick}>
+        {text}
+      </Link>
     );
   }
 

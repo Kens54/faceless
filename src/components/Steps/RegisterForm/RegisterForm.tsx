@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
 import { AxiosResponse, AxiosError } from 'axios';
+import { TPage } from '@src/types/routing';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/registerForm';
 import { IRegisterSuccessResponse, IRegisterFailedResponse } from '@src/types/api/register';
+import { SET_UP_PAGE_PATH } from '@src/constants/routing';
 import {
   // get,
   post,
@@ -9,7 +12,6 @@ import {
 import { useToken } from '@hooks/useToken';
 import Input from '@components/Input';
 import Button from '@components/Button';
-import { TStep } from '@src/types/reducers/page';
 import styles from '@components/Form/styles.module.scss';
 
 export interface IStateProps {
@@ -25,7 +27,6 @@ export interface IActionProps {
   onChangeInputValue: (field: TInputField, value: TFieldValue) => void;
   setError: (value: TErrorValue) => void;
   setSending: (value: boolean) => void;
-  setPageStep: (step: TStep) => void;
 }
 
 type IProps = IStateProps & IActionProps;
@@ -46,9 +47,8 @@ const RegisterForm = ({
   onChangeInputValue,
   setError,
   setSending,
-  setPageStep,
-}: // setPageStep,
-IProps) => {
+}: IProps) => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const setToken = useToken()[1];
 
   const validation: IValidation = {
@@ -96,7 +96,7 @@ IProps) => {
 
         if (res.data.code === 200) {
           setToken(res.data.payload.token);
-          setPageStep('clouds');
+          setRedirect('/choose-cloud');
 
           return res.data.payload.token;
         }
@@ -113,6 +113,10 @@ IProps) => {
         setToken(null);
       });
   };
+
+  if (redirect !== null) {
+    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -167,9 +171,9 @@ IProps) => {
         <div className={styles['button-container']}>
           <Button text="next" onClick={handleSubmit} disabled={!full_name || !email || !password || !password2} />
         </div>
-        <button type="button" className={styles['other-forms-link']} onClick={() => setPageStep('login')}>
+        <Link className={styles['other-forms-link']} to={`${SET_UP_PAGE_PATH}/login`}>
           Have an account? Sign in
-        </button>
+        </Link>
       </div>
     </div>
   );

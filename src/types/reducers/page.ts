@@ -1,11 +1,11 @@
 export type TClouds = 'aws' | 'aws1' | 'aws2';
 export type TStep =
   | 'start'
-  | 'clouds'
-  | 'chooseAuth'
   | 'login'
   | 'register'
-  | 'buy'
+  | 'clouds'
+  | 'chooseAuth'
+  | 'awsCredentials'
   | 'plans'
   | 'chooseProtocol'
   | 'expect-installation'
