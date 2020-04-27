@@ -23,8 +23,8 @@ module.exports = {
   },
   output: {
     path: PATHS.dist,
-    filename: `${PATHS.assets}/js/[name].[chunkhash:8].js`,
-    chunkFilename: `${PATHS.assets}/js/[name].[chunkhash:8].js`,
+    filename: `${PATHS.assets}js/[name].[chunkhash:8].js`,
+    chunkFilename: `${PATHS.assets}js/[name].[chunkhash:8].js`,
     publicPath: '/',
   },
   resolve: {
