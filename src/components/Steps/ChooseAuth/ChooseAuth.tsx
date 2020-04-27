@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import { TChoosedCloud } from '@src/types/reducers/page';
+import React from 'react';
+import { TChoosedCloud, TStep } from '@src/types/reducers/page';
 import { useLocalStorage } from '@hooks/useLocalStorage';
-import { TPage } from '@src/types/routing';
-import { SET_UP_PAGE_PATH } from '@src/constants/routing';
 import { LocalStorageKeys } from '@constants/localStorageKeys';
 import Button from '@components/Button';
 import Private from '@components/Private';
@@ -13,16 +10,15 @@ export interface IStateProps {
   choosedCloud: TChoosedCloud;
 }
 
-type TProps = IStateProps;
+export interface IActionProps {
+  setPageStep: (step: TStep) => void;
+}
 
-const ChooseAuth = ({ choosedCloud }: TProps) => {
-  const [redirect, setRedirect] = useState<TPage | null>(null);
+type TProps = IStateProps & IActionProps;
+
+const ChooseAuth = ({ choosedCloud, setPageStep }: TProps) => {
   const setUseOurRecources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[1];
   const setCredentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[1];
-
-  if (redirect !== null) {
-    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
-  }
 
   return (
     <Private>
@@ -32,10 +28,10 @@ const ChooseAuth = ({ choosedCloud }: TProps) => {
         </div>
         <div className={styles['buttons-block']}>
           <div className={styles['button-container']}>
-            <Button type="innerLink" text="Login" href="/aws-credentials" />
+            <Button text="Login" onClick={() => setPageStep('awsCredentials')} />
           </div>
           <div className={styles['button-container']}>
-            <Button type="innerLink" text="Sign up" href="/aws-credentials" />
+            <Button text="Sign up" onClick={() => setPageStep('awsCredentials')} />
           </div>
           <div className={styles['button-container']}>
             <Button
@@ -43,7 +39,7 @@ const ChooseAuth = ({ choosedCloud }: TProps) => {
               onClick={() => {
                 setUseOurRecources(true);
                 setCredentionals(null);
-                setRedirect('/tarrifs');
+                setPageStep('tarrifs');
               }}
             />
           </div>

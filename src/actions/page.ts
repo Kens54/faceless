@@ -2,10 +2,12 @@ import { ISetStepAction, ISetChoosedCloud, ISetSetupId } from '@src/types/action
 import { PageActionTypes } from '@constants/page';
 import { TStep, TChoosedCloud, TSetupId } from '@src/types/reducers/page';
 
-export const setPageStep = (value: TStep): ISetStepAction => ({
-  type: PageActionTypes.SET_STEP,
-  payload: value,
-});
+export const setPageStep = (value: TStep): ISetStepAction => {
+  return {
+    type: PageActionTypes.SET_STEP,
+    payload: value,
+  };
+};
 
 export const setChoosedCloud = (value: TChoosedCloud): ISetChoosedCloud => ({
   type: PageActionTypes.SET_CHOOSED_CLOUD,

@@ -3,12 +3,12 @@ export type TStep =
   | 'start'
   | 'login'
   | 'register'
-  | 'clouds'
+  | 'chooseCloud'
   | 'chooseAuth'
   | 'awsCredentials'
-  | 'plans'
+  | 'tarrifs'
   | 'chooseProtocol'
-  | 'expect-installation'
+  | 'expectInstallation'
   | 'done';
 export type TChoosedCloud = TClouds | null;
 export type TSetupId = number | null;

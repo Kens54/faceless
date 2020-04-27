@@ -74,8 +74,6 @@ const ProfilePage = ({
           setSubscriptionsData(res.data.payload.subscriptions);
         }
       });
-    } else {
-      window.location.replace(`${window.location.origin}/members`);
     }
     /* eslint-disable */
   }, [setProfileData, token, setCardData, setSubscriptionsData]);

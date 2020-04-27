@@ -1,2 +1,2 @@
 export type TButtonColor = 'green' | 'red';
-export type TButtonType = 'button' | 'link' | 'innerLink';
+export type TButtonType = 'button' | 'link';

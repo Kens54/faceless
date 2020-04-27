@@ -1,6 +1,5 @@
 import React from 'react';
 import moment from 'moment';
-import { SET_UP_PAGE_PATH } from '@constants/routing';
 import { TSubscriptionsState } from '@src/types/reducers/api';
 import styles from './styles.module.scss';
 
@@ -36,7 +35,7 @@ const Subscriptions = ({ subscriptions }: TProps) => {
             <div className={`${styles['table-item']} ${styles['table-item--3']}`}>type</div>
             <div className={`${styles['table-item']} ${styles['table-item--4']}`}>{status}</div>
             <div className={`${styles['table-item']} ${styles['table-item--5']}`}>
-              <a href={`${SET_UP_PAGE_PATH}/tariffs`} className={styles.link}>
+              <a href="/set-up/#tarrifs" className={styles.link}>
                 Edit
               </a>
             </div>

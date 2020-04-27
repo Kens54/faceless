@@ -1,7 +1,10 @@
 import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 // import { useToken } from '@hooks/useToken';
 
-const API: string = 'http://faceless-api.service.faceless-staging.consul';
+const API: string =
+  process.env.NODE_ENV === 'development'
+    ? 'http://faceless-api.service.faceless-staging.consul'
+    : 'https://api.faceless.me';
 
 export const get = (method: string, options?: AxiosRequestConfig): Promise<AxiosResponse> => {
   return axios.get(`${API}${method}`, options);

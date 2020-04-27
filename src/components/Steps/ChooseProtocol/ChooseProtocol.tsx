@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 import { get, post } from '@common/fetch';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { useToken } from '@hooks/useToken';
 import { ISuccessSetupsResponse } from '@src/types/api/setups';
 import { ISuccessSetupPostRequest } from '@src/types/api/setup-post';
-import { TPage } from '@src/types/routing';
 import { LocalStorageKeys } from '@src/constants/localStorageKeys';
-import { TSetupId } from '@src/types/reducers/page';
-import { SET_UP_PAGE_PATH } from '@src/constants/routing';
+import { TSetupId, TStep } from '@src/types/reducers/page';
 import Button from '@components/Button';
 import Private from '@components/Private';
 import styles from './styles.module.scss';
@@ -25,12 +22,12 @@ type TSetups = ISetup[];
 
 export interface IActionProps {
   setSetupId: (id: TSetupId) => void;
+  setPageStep: (step: TStep) => void;
 }
 
 type TProps = IActionProps;
 
-const ChooseProtocol = ({ setSetupId }: TProps) => {
-  const [redirect, setRedirect] = useState<TPage | null>(null);
+const ChooseProtocol = ({ setSetupId, setPageStep }: TProps) => {
   const token = useToken()[0];
   const useOurResources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[0];
   const credentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[0];
@@ -71,20 +68,16 @@ const ChooseProtocol = ({ setSetupId }: TProps) => {
       }).then((res: AxiosResponse<ISuccessSetupPostRequest>) => {
         if (res.data.code === 200) {
           setSetupId(res.data.payload.id);
-          setRedirect('/expect-installation');
+          setPageStep("expectInstallation");
         }
       });
     } else {
-      setRedirect('/login');
+      setPageStep("login");
     }
   };
 
   if (setups === null) {
     return null;
-  }
-
-  if (redirect !== null) {
-    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
   }
 
   return (

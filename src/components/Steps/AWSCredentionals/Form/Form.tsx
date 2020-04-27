@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
-import { TPage } from '@src/types/routing';
-import { SET_UP_PAGE_PATH } from '@src/constants/routing';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { LocalStorageKeys } from '@constants/localStorageKeys';
+import { TStep } from '@src/types/reducers/page';
 import Button from '@components/Button';
 import styles from './styles.module.scss';
 
-const Form = () => {
-  const [redirect, setRedirect] = useState<TPage | null>(null);
+export interface IActionProps {
+  setPageStep: (step: TStep) => void;
+}
+
+type TProps = IActionProps;
+
+const Form = ({ setPageStep }: TProps) => {
   const [keyId, setKeyId] = useState<string>('');
   const [secretKey, setSecretKey] = useState<string>('');
   // const [region, setRegion] = useState<string>('');
@@ -35,13 +38,9 @@ const Form = () => {
         aws_access_key: keyId,
         aws_secret_key: secretKey,
       });
-      setRedirect('/tarrifs');
+      setPageStep('tarrifs');
     }
   };
-
-  if (redirect !== null) {
-    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
-  }
 
   return (
     <div className={styles.wrapper}>

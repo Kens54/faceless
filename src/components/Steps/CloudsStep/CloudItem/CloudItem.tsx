@@ -1,14 +1,12 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
 import Button from '@components/Button';
-import { TClouds } from '@src/types/reducers/page';
-import { TPage } from '@src/types/routing';
-import { SET_UP_PAGE_PATH } from '@src/constants/routing';
+import { TClouds, TStep } from '@src/types/reducers/page';
 import { TButtonColor } from '@src/types/components/button';
 import styles from './styles.module.scss';
 
 export interface IActionProps {
   chooseCloud: (name: TClouds) => void;
+  setPageStep: (step: TStep) => void;
 }
 
 interface IComponentProps {
@@ -18,17 +16,11 @@ interface IComponentProps {
 
 type TProps = IActionProps & IComponentProps;
 
-const CloudItem = ({ name, buttonColor, chooseCloud }: TProps) => {
-  const [redirect, setRedirect] = useState<TPage | null>(null);
+const CloudItem = ({ name, buttonColor, chooseCloud, setPageStep }: TProps) => {
   const onChooseCloud = () => {
     chooseCloud(name);
-
-    setRedirect('/choose-auth');
+    setPageStep('chooseAuth');
   };
-
-  if (redirect !== null) {
-    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
-  }
 
   return (
     <div className={styles.container}>

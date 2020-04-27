@@ -3,7 +3,7 @@ import { PageActionTypes } from '@constants/page';
 import { TPageActions } from '@src/types/actions/page';
 
 const initialState: IPageState = {
-  step: 'plans',
+  step: 'start',
   choosedCloud: 'aws',
   setupId: null,
 };

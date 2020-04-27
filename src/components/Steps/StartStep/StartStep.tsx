@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
+import React, { useEffect } from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
-import { TPage } from '@src/types/routing';
-import { SET_UP_PAGE_PATH } from '@constants/routing';
 import { get } from '@common/fetch';
+import { TStep } from '@src/types/reducers/page';
 import { IMeSuccessResponse, IMeFailedResponse } from '@src/types/api/me';
 import { useToken } from '@hooks/useToken';
 import Button from '@components/Button';
 import styles from './styles.module.scss';
 
-const StartStep = () => {
-  const [redirect, setRedirect] = useState<TPage | null>(null);
+export interface IActionProps {
+  setPageStep: (step: TStep) => void;
+}
+
+type TProps = IActionProps;
+
+const StartStep = ({ setPageStep }: TProps) => {
   const token = useToken()[0];
   const params = {
     headers: {
@@ -26,31 +29,27 @@ const StartStep = () => {
           const data = res.data.payload;
           if (res.data.code === 200) {
             if (data.payment_type === 'card' && data.expires_in > 0) {
-              setRedirect('/choose-protocol');
+              setPageStep('chooseProtocol');
             } else {
-              setRedirect('/tarrifs');
+              setPageStep('tarrifs');
             }
           }
         })
         .catch((error: AxiosError<IMeFailedResponse>) => {
           if (error.response) {
             if (error.response.data.code !== 401) {
-              setRedirect('/choose-cloud');
+              setPageStep('chooseAuth');
             }
           }
         });
     }
-  }, [token, params]);
-
-  if (redirect !== null) {
-    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
-  }
+  }, [token, params, setPageStep]);
 
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Set up vpn on your server</h2>
       <p className={styles.description}>Online anonymity</p>
-      <Button text="Сhoose cloud" href="/login" type="innerLink" />
+      <Button text="Choose cloud" onClick={() => setPageStep('login')} />
     </div>
   );
 };
