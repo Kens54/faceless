@@ -6,6 +6,8 @@ const API: string =
     ? 'http://faceless-api.service.faceless-staging.consul'
     : 'https://api.faceless.me';
 
+// const API: string = 'http://faceless-api.service.faceless-staging.consul';
+
 export const get = (method: string, options?: AxiosRequestConfig): Promise<AxiosResponse> => {
   return axios.get(`${API}${method}`, options);
 };

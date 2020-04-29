@@ -61,7 +61,7 @@ const Plans = ({ tariffs, setTariffsData }: TProps) => {
                 <Plan
                   key={plan.id}
                   id={plan.id}
-                  title="1 week"
+                  title={plan.name}
                   price={plan.amount}
                   currency={plan.currency}
                   btnColor={btnColor}

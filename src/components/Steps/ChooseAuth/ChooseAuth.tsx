@@ -14,9 +14,13 @@ export interface IActionProps {
   setPageStep: (step: TStep) => void;
 }
 
-type TProps = IStateProps & IActionProps;
+interface IComponentProps {
+  error?: boolean;
+}
 
-const ChooseAuth = ({ choosedCloud, setPageStep }: TProps) => {
+type TProps = IStateProps & IActionProps & IComponentProps;
+
+const ChooseAuth = ({ choosedCloud, setPageStep, error }: TProps) => {
   const setUseOurRecources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[1];
   const setCredentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[1];
 
@@ -44,6 +48,7 @@ const ChooseAuth = ({ choosedCloud, setPageStep }: TProps) => {
             />
           </div>
         </div>
+        {error && <div className={styles.error}>Your payment has been failed. Please try again</div>}
       </div>
     </Private>
   );

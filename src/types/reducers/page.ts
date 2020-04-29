@@ -5,6 +5,7 @@ export type TStep =
   | 'register'
   | 'chooseCloud'
   | 'chooseAuth'
+  | 'chooseAuthError'
   | 'awsCredentials'
   | 'tarrifs'
   | 'chooseProtocol'

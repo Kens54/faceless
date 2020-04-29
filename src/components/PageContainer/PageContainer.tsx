@@ -1,4 +1,5 @@
 import React from 'react';
+import { getSearchParameter } from '@common/getSearchParameter';
 import StartStep from '@components/Steps/StartStep';
 import LoginForm from '@components/Steps/LoginForm';
 import RegisterForm from '@components/Steps/RegisterForm';
@@ -18,11 +19,16 @@ export interface IStateProps {
 type TProps = IStateProps;
 
 const PageContainer = ({ step }: TProps) => {
-  if (window.location.hash === '#tarrifs') {
-    return <Plans />;
+  let pageStep = step;
+  const isBillingError = getSearchParameter('billing-error');
+
+  if (step === 'start' && window.location.hash === '#tarrifs') {
+    pageStep = 'tarrifs';
+  } else if (step === 'start' && isBillingError === 'true') {
+    pageStep = 'chooseAuthError';
   }
 
-  switch (step) {
+  switch (pageStep) {
     case 'start':
       return <StartStep />;
     case 'login':
@@ -33,6 +39,8 @@ const PageContainer = ({ step }: TProps) => {
       return <CloudsStep />;
     case 'chooseAuth':
       return <ChooseAuth />;
+    case 'chooseAuthError':
+      return <ChooseAuth error />;
     case 'awsCredentials':
       return <AWSCredentionals />;
     case 'tarrifs':

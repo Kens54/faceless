@@ -32,7 +32,7 @@ const Subscriptions = ({ subscriptions }: TProps) => {
           <div key={item.started_at.toString()} className={styles['table-row']}>
             <div className={`${styles['table-item']} ${styles['table-item--1']}`}>{startedDate}</div>
             <div className={`${styles['table-item']} ${styles['table-item--2']}`}>{expiredDate}</div>
-            <div className={`${styles['table-item']} ${styles['table-item--3']}`}>type</div>
+            <div className={`${styles['table-item']} ${styles['table-item--3']}`}>{item.tariff.name}</div>
             <div className={`${styles['table-item']} ${styles['table-item--4']}`}>{status}</div>
             <div className={`${styles['table-item']} ${styles['table-item--5']}`}>
               <a href="/set-up/#tarrifs" className={styles.link}>

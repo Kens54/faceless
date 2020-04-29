@@ -66,4 +66,18 @@
 .button {
   display: flex;
   justify-content: center;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  display: block;
+  margin: 0 auto;
+  font-size: 18px;
+  color: #1e3f5f;
+  text-decoration: underline;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: none;
+  }
 }

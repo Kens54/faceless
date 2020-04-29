@@ -78,6 +78,9 @@ const Form = ({ setPageStep }: TProps) => {
           <div className={styles.button}>
             <Button text="Next" onClick={onSubmit} />
           </div>
+          <button type="button" className={styles['back-button']} onClick={() => setPageStep('chooseAuth')}>
+            or buy with faceless
+          </button>
         </form>
       </div>
     </div>
