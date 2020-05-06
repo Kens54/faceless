@@ -1,7 +1,6 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
 import { get } from '@common/fetch';
-import { useToken } from '@hooks/useToken';
 import { TButtonColor } from '@src/types/components/button';
 import { ISuccesBillingRedirectLink } from '@src/types/api/billingRedirectLink';
 import Button from '@components/Button';
@@ -18,19 +17,14 @@ interface IComponentProps {
 type IProps = IComponentProps;
 
 const Plan = ({ id, title, price, btnColor, currency }: IProps) => {
-  const token = useToken()[0];
   const handleClickBuyButton = () => {
-    const params = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+    get({
+      method: `/billing/tariff/${id}`,
+      successCallback: (res: AxiosResponse<ISuccesBillingRedirectLink>) => {
+        if (res.data.code === 200) {
+          window.location.href = res.data.payload.redirect;
+        }
       },
-    };
-
-    get(`/billing/tariff/${id}`, params).then((res: AxiosResponse<ISuccesBillingRedirectLink>) => {
-      if (res.data.code === 200) {
-        window.location.href = res.data.payload.redirect;
-      }
     });
   };
 

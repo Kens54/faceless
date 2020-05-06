@@ -26,10 +26,13 @@ type TProps = IStateProps & IActionProps;
 
 const Plans = ({ tariffs, setTariffsData }: TProps) => {
   useEffect(() => {
-    get('/billing/tariffs').then((res: AxiosResponse<ISuccessTariffsResponse>) => {
-      if (res.data.code === 200) {
-        setTariffsData(res.data.payload);
-      }
+    get({
+      method: '/billing/tariffs',
+      successCallback: (res: AxiosResponse<ISuccessTariffsResponse>) => {
+        if (res.data.code === 200) {
+          setTariffsData(res.data.payload);
+        }
+      },
     });
   }, [setTariffsData]);
 

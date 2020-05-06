@@ -3,7 +3,6 @@ import { AxiosResponse, AxiosError } from 'axios';
 import { get } from '@common/fetch';
 import { TStep } from '@src/types/reducers/page';
 import { IMeSuccessResponse, IMeFailedResponse } from '@src/types/api/me';
-import { useToken } from '@hooks/useToken';
 import Button from '@components/Button';
 import styles from './styles.module.scss';
 
@@ -14,36 +13,26 @@ export interface IActionProps {
 type TProps = IActionProps;
 
 const StartStep = ({ setPageStep }: TProps) => {
-  const token = useToken()[0];
-  const params = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  };
-
   useEffect(() => {
-    if (token) {
-      get('/me', params)
-        .then((res: AxiosResponse<IMeSuccessResponse>) => {
-          const data = res.data.payload;
-          if (res.data.code === 200) {
-            if (data.payment_type === 'card' && data.expires_in > 0) {
-              setPageStep('chooseProtocol');
-            } else {
-              setPageStep('tarrifs');
-            }
+    get({
+      method: '/me',
+      successCallback: (res: AxiosResponse<IMeSuccessResponse>) => {
+        const data = res.data.payload;
+        if (res.data.code === 200) {
+          if (data.payment_type === 'card' && data.expires_in > 0) {
+            setPageStep('chooseProtocol');
+          } else {
+            setPageStep('tarrifs');
           }
-        })
-        .catch((error: AxiosError<IMeFailedResponse>) => {
-          if (error.response) {
-            if (error.response.data.code !== 401) {
-              setPageStep('chooseAuth');
-            }
-          }
-        });
-    }
-  }, [token, params, setPageStep]);
+        }
+      },
+      errorCallback: (error: AxiosError<IMeFailedResponse>) => {
+        if (error.response) {
+          setPageStep('chooseAuth');
+        }
+      },
+    });
+  }, [setPageStep]);
 
   return (
     <div className={styles.wrapper}>

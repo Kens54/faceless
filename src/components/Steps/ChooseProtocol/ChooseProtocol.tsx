@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 import { get, post } from '@common/fetch';
 import { useLocalStorage } from '@hooks/useLocalStorage';
-import { useToken } from '@hooks/useToken';
 import { ISuccessSetupsResponse } from '@src/types/api/setups';
 import { ISuccessSetupPostRequest } from '@src/types/api/setup-post';
+import { IResponseError } from '@src/types/api/error';
 import { LocalStorageKeys } from '@src/constants/localStorageKeys';
 import { TSetupId, TStep } from '@src/types/reducers/page';
 import Button from '@components/Button';
@@ -28,52 +28,54 @@ export interface IActionProps {
 type TProps = IActionProps;
 
 const ChooseProtocol = ({ setSetupId, setPageStep }: TProps) => {
-  const token = useToken()[0];
   const useOurResources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[0];
-  const credentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[0];
+  const credentials = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[0];
   const [setups, setSetups] = useState<TSetups | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    get('/vpn/setups', {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+    get({
+      method: '/vpn/setups',
+      successCallback: (res: AxiosResponse<ISuccessSetupsResponse>) => {
+        if (res.data.code === 200) {
+          setSetups(res.data.payload);
+        }
       },
-    }).then((res: AxiosResponse<ISuccessSetupsResponse>) => {
-      if (res.data.code === 200) {
-        setSetups(res.data.payload);
-      }
+      authErrorCallback: () => setPageStep('login'),
     });
-  }, [token]);
+  }, [setPageStep]);
 
   const handleChooseProtocol = (id: number) => {
-    if (token) {
-      const getParams = () => {
-        if (useOurResources === false && credentionals !== null) {
-          return {
-            credentials: credentionals,
-            setup_id: id,
-            used_our_resourses: false,
-          };
-        }
+    const getParams = () => {
+      if (useOurResources === false && credentials !== null) {
+        return {
+          credentials,
+          setup_id: id,
+          used_our_resources: false,
+        };
+      }
 
-        return { setup_id: id, used_our_resourses: true };
-      };
+      return { setup_id: id, used_our_resources: true };
+    };
 
-      post('/vpn/setup', getParams(), {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res: AxiosResponse<ISuccessSetupPostRequest>) => {
+    post({
+      method: '/vpn/setup',
+      options: getParams(),
+      successCallback: (res: AxiosResponse<ISuccessSetupPostRequest>) => {
         if (res.data.code === 200) {
           setSetupId(res.data.payload.id);
-          setPageStep("expectInstallation");
+          setPageStep('expectInstallation');
         }
-      });
-    } else {
-      setPageStep("login");
-    }
+      },
+      authErrorCallback: () => setPageStep('login'),
+      errorCallback: (res: AxiosError<IResponseError>) => {
+        if (res.response) {
+          setError(res.response.data.message);
+        } else if (res.message) {
+          setError(res.message);
+        }
+      },
+    });
   };
 
   if (setups === null) {
@@ -95,6 +97,7 @@ const ChooseProtocol = ({ setSetupId, setPageStep }: TProps) => {
             </li>
           ))}
         </ul>
+        {error && <div className={styles.error}>{error}</div>}
       </div>
     </Private>
   );

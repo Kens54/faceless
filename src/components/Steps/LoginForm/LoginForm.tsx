@@ -3,7 +3,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/loginForm';
 import { IRegisterSuccessResponse } from '@src/types/api/register';
 import { IMeSuccessResponse } from '@src/types/api/me';
-import { get, post } from '@common/fetch';
+import { post, get } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
 import { TStep } from '@src/types/reducers/page';
 import Input from '@components/Input';
@@ -64,46 +64,40 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
       return;
     }
 
-    post('/login', {
-      email,
-      password,
-    })
-      .then((res: AxiosResponse<IRegisterSuccessResponse>) => {
+    post({
+      method: '/login',
+      options: { email, password },
+      successCallback: (res: AxiosResponse<IRegisterSuccessResponse>) => {
         setSending(false);
 
         if (res.data.code === 200) {
           const { token } = res.data.payload;
           setToken(token);
 
-          get('/me', {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }).then((meRes: AxiosResponse<IMeSuccessResponse>) => {
-            if (meRes.data.code === 200) {
-              if (meRes.data.payload.payment_type === 'card') {
-                setPageStep('chooseProtocol');
-              } else {
-                setPageStep('chooseCloud');
+          get({
+            method: '/me',
+            successCallback: (meRes: AxiosResponse<IMeSuccessResponse>) => {
+              if (meRes.data.code === 200) {
+                if (meRes.data.payload.payment_type === 'card') {
+                  setPageStep('chooseProtocol');
+                } else {
+                  setPageStep('chooseCloud');
+                }
               }
-            }
+            },
           });
-
-          return res.data.payload.token;
         }
-
-        return null;
-      })
-      .catch((resError: AxiosError<ILoginFailedResponse>) => {
-        if (resError.response) {
-          setError(resError.response.data.message);
-        } else if (resError.message) {
-          setError(resError.message);
+      },
+      errorCallback: (res: AxiosError<ILoginFailedResponse>) => {
+        if (res.response) {
+          setError(res.response.data.message);
+        } else if (res.message) {
+          setError(res.message);
         }
 
         setToken(null);
-      });
+      },
+    });
   };
 
   return (

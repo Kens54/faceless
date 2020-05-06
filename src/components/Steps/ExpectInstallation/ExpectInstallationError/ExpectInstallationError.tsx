@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
-import { Redirect } from 'react-router-dom';
+import React from 'react';
 import { post } from '@src/common/fetch';
 import { TSetupId } from '@src/types/reducers/page';
-import { TPage } from '@src/types/routing';
-import { useToken } from '@src/hooks/useToken';
 import { LocalStorageKeys } from '@src/constants/localStorageKeys';
 import { useLocalStorage } from '@src/hooks/useLocalStorage';
 import { AxiosResponse } from 'axios';
 import { ISuccessSetupPostRequest } from '@src/types/api/setup-post';
-import { SET_UP_PAGE_PATH } from '@src/constants/routing';
 import Button from '@components/Button';
 import styles from '../styles.module.scss';
 
@@ -20,43 +16,32 @@ interface IComponentProps {
 type TProps = IComponentProps;
 
 const ExpectInstallationError = ({ setupId, setError }: TProps) => {
-  const [redirect, setRedirect] = useState<TPage | null>(null);
-  const token = useToken()[0];
   const useOurResources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[0];
   const credentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[0];
 
   const handleSetup = () => {
-    if (token) {
-      const getParams = () => {
-        if (useOurResources === false && credentionals !== null) {
-          return {
-            credentials: credentionals,
-            setup_id: setupId,
-            used_our_resourses: false,
-          };
-        }
+    const getParams = () => {
+      if (useOurResources === false && credentionals !== null) {
+        return {
+          credentials: credentionals,
+          setup_id: setupId,
+          used_our_resources: false,
+        };
+      }
 
-        return { setup_id: setupId, used_our_resourses: true };
-      };
+      return { setup_id: setupId, used_our_resources: true };
+    };
 
-      post('/vpn/setup', getParams(), {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res: AxiosResponse<ISuccessSetupPostRequest>) => {
+    post({
+      method: '/vpn/setup',
+      options: getParams(),
+      successCallback: (res: AxiosResponse<ISuccessSetupPostRequest>) => {
         if (res.data.code === 200) {
           setError(false);
         }
-      });
-    } else {
-      setRedirect('/login');
-    }
+      },
+    });
   };
-
-  if (redirect !== null) {
-    return <Redirect to={`${SET_UP_PAGE_PATH}${redirect}`} />;
-  }
 
   return (
     <div className={styles.wrapper}>

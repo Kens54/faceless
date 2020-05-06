@@ -81,12 +81,10 @@ const RegisterForm = ({
       return;
     }
 
-    post('/register', {
-      full_name,
-      email,
-      password,
-    })
-      .then((res: AxiosResponse<IRegisterSuccessResponse>) => {
+    post({
+      method: '/register',
+      options: { full_name, email, password },
+      successCallback: (res: AxiosResponse<IRegisterSuccessResponse>) => {
         setSending(false);
 
         if (res.data.code === 200) {
@@ -97,8 +95,8 @@ const RegisterForm = ({
         }
 
         return null;
-      })
-      .catch((resError: AxiosError<IRegisterFailedResponse>) => {
+      },
+      errorCallback: (resError: AxiosError<IRegisterFailedResponse>) => {
         if (resError.response) {
           setError(resError.response.data.message);
         } else if (resError.message) {
@@ -106,7 +104,8 @@ const RegisterForm = ({
         }
 
         setToken(null);
-      });
+      },
+    });
   };
 
   return (

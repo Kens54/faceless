@@ -1,10 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { AxiosResponse, AxiosError } from 'axios';
 import lottie from 'lottie-web';
-import { ISuccessMeVpnIdRequest } from '@src/types/api/me-vpn-id';
-import { IResponseError } from '@src/types/api/error';
 import { TSetupId, TStep } from '@src/types/reducers/page';
-import { useToken } from '@hooks/useToken';
 import { get } from '@common/fetch';
 import Private from '@components/Private';
 import ExpectInstallationError from './ExpectInstallationError';
@@ -24,7 +20,7 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
   const [tarrifId, setTarrifId] = useState<number | null>(null);
   const [error, setError] = useState(false);
   const loaderRef = useRef<HTMLDivElement>(null);
-  const token = useToken()[0];
+  // const token = useToken()[0];
 
   const getSetupStatus = useCallback(
     (time: number) => {
@@ -36,13 +32,9 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
           };
         }
 
-        get(`/me/vpn/${setupId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        })
-          .then((res: AxiosResponse<ISuccessMeVpnIdRequest>) => {
+        get({
+          method: `/me/vpn/${setupId}`,
+          successCallback: res => {
             if (res.data.code === 200) {
               setTarrifId(res.data.payload.setup_id);
               if (res.data.payload.setup_status === 'started') {
@@ -54,24 +46,19 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
                 getSetupStatus(retryAfter);
               }
             }
-          })
-          .catch((resError: AxiosError<IResponseError>) => {
-            if (resError.response) {
-              if (resError.response.data.code === 401) {
-                setPageStep('login');
-              }
-            }
-          });
+          },
+          authErrorCallback: () => setPageStep('login'),
+        });
       }, time);
     },
-    [token, setupId, setPageStep],
+    [setupId, setPageStep],
   );
 
   useEffect(() => {
     if (!setupId) {
       setPageStep('chooseProtocol');
     }
-  }, [setupId, setPageStep])
+  }, [setupId, setPageStep]);
 
   useEffect(() => {
     if (!error) {

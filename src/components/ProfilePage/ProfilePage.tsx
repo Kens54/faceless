@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
-import { AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse } from 'axios';
 import { IProfileData, TCardState, TSubscriptionsState } from '@src/types/reducers/api';
-import { useToken } from '@hooks/useToken';
 import { get } from '@common/fetch';
 import { IMeSuccessResponse } from '@src/types/api/me';
-import { ISuccessRefreshTokenResponse } from '@src/types/api/refresh_token';
 import { ISuccessBillingInfoRequest } from '@src/types/api/billingInfo';
-import { IResponseError } from '@src/types/api/error';
 import Section from './Section';
 import PersonalDataItem from './PersonalDataItem';
 import Subscriptions from './Subscriptions';
@@ -39,45 +36,26 @@ const ProfilePage = ({
   setCardData,
   setSubscriptionsData,
 }: IProps) => {
-  const [token, setToken] = useToken();
-
   useEffect(() => {
-    if (token) {
-      const params = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-      };
+    get({
+      method: '/me',
+      successCallback: (res: AxiosResponse<IMeSuccessResponse>) => {
+        if (res.data.code === 200) {
+          setProfileData(res.data.payload);
+        }
+      },
+    });
 
-      get('/me', params)
-        .then((res: AxiosResponse<IMeSuccessResponse>) => {
-          if (res.data.code === 200) {
-            setProfileData(res.data.payload);
-          }
-        })
-        .catch((error: AxiosError<IResponseError>) => {
-          if (error.response) {
-            if (error.response.data.code === 401) {
-              get('/refresh_token', params).then((res: AxiosResponse<ISuccessRefreshTokenResponse>) => {
-                if (res.data.code === 200) {
-                  setToken(res.data.payload.token);
-                }
-              });
-            }
-          }
-        });
-
-      get('/me/billing/info', params).then((res: AxiosResponse<ISuccessBillingInfoRequest>) => {
+    get({
+      method: '/me/billing/info',
+      successCallback: (res: AxiosResponse<ISuccessBillingInfoRequest>) => {
         if (res.data.code === 200) {
           setCardData(res.data.payload.card);
           setSubscriptionsData(res.data.payload.subscriptions);
         }
-      });
-    }
-    /* eslint-disable */
-  }, [setProfileData, token, setCardData, setSubscriptionsData]);
-  /* eslint-enable */
+      },
+    });
+  }, [setProfileData, setCardData, setSubscriptionsData]);
 
   return (
     <div className={styles.wrapper}>
