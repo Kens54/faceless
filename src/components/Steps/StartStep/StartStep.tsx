@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
+import lottie from 'lottie-web';
 import { get } from '@common/fetch';
 import { TStep } from '@src/types/reducers/page';
 import { IMeSuccessResponse, IMeFailedResponse } from '@src/types/api/me';
@@ -13,6 +14,9 @@ export interface IActionProps {
 type TProps = IActionProps;
 
 const StartStep = ({ setPageStep }: TProps) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const loaderRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     get({
       method: '/me',
@@ -31,14 +35,35 @@ const StartStep = ({ setPageStep }: TProps) => {
           setPageStep('chooseAuth');
         }
       },
+      authErrorCallback: () => {
+        setLoading(false);
+      },
     });
   }, [setPageStep]);
 
+  useEffect(() => {
+    if (loading && loaderRef.current !== null) {
+      lottie.loadAnimation({
+        container: loaderRef.current,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '../../../assets/json/loader.json',
+      });
+    }
+  }, [loading]);
+
   return (
     <div className={styles.wrapper}>
-      <h2 className={styles.title}>Set up vpn on your server</h2>
-      <p className={styles.description}>Online anonymity</p>
-      <Button text="Choose cloud" onClick={() => setPageStep('login')} />
+      {loading ? (
+        <div ref={loaderRef} className={styles.loader} />
+      ) : (
+        <>
+          <h2 className={styles.title}>Set up vpn on your server</h2>
+          <p className={styles.description}>Online anonymity</p>
+          <Button text="Choose cloud" onClick={() => setPageStep('login')} />
+        </>
+      )}
     </div>
   );
 };
