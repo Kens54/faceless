@@ -2,6 +2,7 @@ import React from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/loginForm';
 import { IRegisterSuccessResponse } from '@src/types/api/register';
+import { IResponseError } from '@src/types/api/error';
 import { IMeSuccessResponse } from '@src/types/api/me';
 import { post, get } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
@@ -88,7 +89,16 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
           });
         }
       },
-      errorCallback: (res: AxiosError<ILoginFailedResponse>) => {
+      authErrorCallback: (res: AxiosError<IResponseError>) => {
+        if (res.response) {
+          setError(res.response.data.message);
+        } else if (res.message) {
+          setError(res.message);
+        }
+
+        setToken(null);
+      },
+      errorCallback: (res: AxiosError<IResponseError>) => {
         if (res.response) {
           setError(res.response.data.message);
         } else if (res.message) {

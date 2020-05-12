@@ -12,7 +12,7 @@ const API: string =
 interface IGetParams {
   method: string;
   options?: AxiosRequestConfig;
-  authErrorCallback?: () => void;
+  authErrorCallback?: (error?: any) => void;
   successCallback?: (value: AxiosResponse) => void;
   errorCallback?: (error: any) => void;
 }
@@ -21,7 +21,7 @@ interface IPostParams {
   method: string;
   options: object;
   headers?: object;
-  authErrorCallback?: () => void;
+  authErrorCallback?: (error?: any) => void;
   successCallback?: (value: AxiosResponse) => void;
   errorCallback?: (error: any) => void;
 }
@@ -82,7 +82,7 @@ export const get = async ({ method, options = {}, authErrorCallback, successCall
     if (error.response.data.code === 401) {
       if (token === null) {
         if (authErrorCallback) {
-          authErrorCallback();
+          authErrorCallback(error);
         }
       } else {
         refreshToken(authErrorCallback, () => get({ method, options, successCallback }));
@@ -121,7 +121,7 @@ export const post = async ({
     if (error.response.data.code === 401) {
       if (token === null) {
         if (authErrorCallback) {
-          authErrorCallback();
+          authErrorCallback(error);
         }
       } else {
         refreshToken(authErrorCallback, () => post({ method, options, headers, successCallback }));
