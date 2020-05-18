@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { LocalStorageKeys } from '@constants/localStorageKeys';
-import { TStep } from '@src/types/reducers/page';
+import { TPage } from '@src/types/routing';
 import Button from '@components/Button';
+import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 import styles from './styles.module.scss';
 
-export interface IActionProps {
-  setPageStep: (step: TStep) => void;
-}
+// export interface IActionProps {
+//   setPageStep: (step: TStep) => void;
+// }
 
-type TProps = IActionProps;
+// type TProps = IActionProps;
 
-const Form = ({ setPageStep }: TProps) => {
+const Form = () => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const [keyId, setKeyId] = useState<string>('');
   const [secretKey, setSecretKey] = useState<string>('');
   // const [region, setRegion] = useState<string>('');
@@ -38,9 +40,13 @@ const Form = ({ setPageStep }: TProps) => {
         aws_access_key: keyId,
         aws_secret_key: secretKey,
       });
-      setPageStep('tarrifs');
+      setRedirect('/tarrifs');
     }
   };
+
+  if (redirect) {
+    return <InnerSetupRedirect to={redirect} />;
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -78,9 +84,14 @@ const Form = ({ setPageStep }: TProps) => {
           <div className={styles.button}>
             <Button text="Next" onClick={onSubmit} />
           </div>
-          <button type="button" className={styles['back-button']} onClick={() => setPageStep('chooseAuth')}>
-            or buy with faceless
-          </button>
+          <div className={styles.button}>
+            <Button
+              text="or buy with faceless"
+              type="innerLink"
+              className={styles['back-button']}
+              href="/choose-auth"
+            />
+          </div>
         </form>
       </div>
     </div>

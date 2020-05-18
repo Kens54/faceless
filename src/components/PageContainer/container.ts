@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
-import { IStoreState } from '@src/types/store';
-import PageContainer, { IStateProps } from './PageContainer';
+// import { connect } from 'react-redux';
+// import { IStoreState } from '@src/types/store';
+// import PageContainer, { IStateProps } from './PageContainer';
 
-const mapStateToProps = (state: IStoreState): IStateProps => ({
-  step: state.page.step,
-});
+// const mapStateToProps = (state: IStoreState): IStateProps => ({
+//   step: state.page.step,
+// });
 
-export default connect(mapStateToProps)(PageContainer);
+// export default connect(mapStateToProps)(PageContainer);

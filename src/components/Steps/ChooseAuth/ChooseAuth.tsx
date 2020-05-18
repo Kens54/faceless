@@ -1,28 +1,35 @@
-import React from 'react';
-import { TChoosedCloud, TStep } from '@src/types/reducers/page';
+import React, { useState } from 'react';
+import { TChoosedCloud } from '@src/types/reducers/page';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { LocalStorageKeys } from '@constants/localStorageKeys';
+import { TPage } from '@src/types/routing';
 import Button from '@components/Button';
 import Private from '@components/Private';
+import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 import styles from './styles.module.scss';
 
 export interface IStateProps {
   choosedCloud: TChoosedCloud;
 }
 
-export interface IActionProps {
-  setPageStep: (step: TStep) => void;
-}
+// export interface IActionProps {
+//   setPageStep: (step: TStep) => void;
+// }
 
 interface IComponentProps {
   error?: boolean;
 }
 
-type TProps = IStateProps & IActionProps & IComponentProps;
+type TProps = IStateProps & IComponentProps;
 
-const ChooseAuth = ({ choosedCloud, setPageStep, error }: TProps) => {
+const ChooseAuth = ({ choosedCloud, error }: TProps) => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const setUseOurRecources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[1];
   const setCredentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[1];
+
+  if (redirect) {
+    return <InnerSetupRedirect to={redirect} />;
+  }
 
   return (
     <Private>
@@ -32,10 +39,10 @@ const ChooseAuth = ({ choosedCloud, setPageStep, error }: TProps) => {
         </div>
         <div className={styles['buttons-block']}>
           <div className={styles['button-container']}>
-            <Button text="Login" onClick={() => setPageStep('awsCredentials')} />
+            <Button type="innerLink" text="Login" href="/aws-credentials" />
           </div>
           <div className={styles['button-container']}>
-            <Button text="Sign up" onClick={() => setPageStep('awsCredentials')} />
+            <Button type="innerLink" text="Sign up" href="/aws-credentials" />
           </div>
           <div className={styles['button-container']}>
             <Button
@@ -43,7 +50,7 @@ const ChooseAuth = ({ choosedCloud, setPageStep, error }: TProps) => {
               onClick={() => {
                 setUseOurRecources(true);
                 setCredentionals(null);
-                setPageStep('tarrifs');
+                setRedirect('/tarrifs');
               }}
             />
           </div>

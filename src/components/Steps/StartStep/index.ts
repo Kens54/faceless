@@ -1,3 +1,3 @@
-import StartStep from './container';
+import StartStep from './StartStep';
 
 export default StartStep;

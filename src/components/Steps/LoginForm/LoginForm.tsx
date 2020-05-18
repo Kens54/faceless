@@ -1,15 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/loginForm';
+import { TPage } from '@src/types/routing';
 import { IRegisterSuccessResponse } from '@src/types/api/register';
 import { IResponseError } from '@src/types/api/error';
 import { IMeSuccessResponse } from '@src/types/api/me';
 import { post, get } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
-import { TStep } from '@src/types/reducers/page';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import styles from '@components/Form/styles.module.scss';
+import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 
 export interface IStateProps {
   email: TFieldValue;
@@ -22,7 +23,7 @@ export interface IActionProps {
   onChangeInputValue: (field: TInputField, value: TFieldValue) => void;
   setError: (value: TErrorValue) => void;
   setSending: (value: boolean) => void;
-  setPageStep: (step: TStep) => void;
+  // setPageStep: (step: TStep) => void;
 }
 
 type IProps = IStateProps & IActionProps;
@@ -33,7 +34,8 @@ interface IValidation {
   };
 }
 
-const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSending, setPageStep }: IProps) => {
+const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSending }: IProps) => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const setToken = useToken()[1];
 
   const validation: IValidation = {
@@ -80,9 +82,9 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
             successCallback: (meRes: AxiosResponse<IMeSuccessResponse>) => {
               if (meRes.data.code === 200) {
                 if (meRes.data.payload.payment_type === 'card') {
-                  setPageStep('chooseProtocol');
+                  setRedirect('/choose-protocol');
                 } else {
-                  setPageStep('chooseCloud');
+                  setRedirect('/choose-auth');
                 }
               }
             },
@@ -109,6 +111,10 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
       },
     });
   };
+
+  if (redirect) {
+    return <InnerSetupRedirect to={redirect} />;
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -140,9 +146,12 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
         <div className={styles['button-container']}>
           <Button text="next" onClick={handleSubmit} disabled={!email || !password} />
         </div>
-        <button type="button" className={styles['other-forms-link']} onClick={() => setPageStep('register')}>
-          Not registered yet? Sign up
-        </button>
+        <Button
+          type="innerLink"
+          text="Not registered yet? Sign up"
+          className={styles['other-forms-link']}
+          href="/register"
+        />
       </div>
     </div>
   );

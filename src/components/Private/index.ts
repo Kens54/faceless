@@ -1,3 +1,3 @@
-import Private from "./container";
+import Private from './Private';
 
 export default Private;

@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/registerForm';
 import { IRegisterSuccessResponse, IRegisterFailedResponse } from '@src/types/api/register';
-import { TStep } from '@src/types/reducers/page';
+// import { TStep } from '@src/types/reducers/page';
+import { TPage } from '@src/types/routing';
 import { post } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import styles from '@components/Form/styles.module.scss';
+import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 
 export interface IStateProps {
   full_name: TFieldValue;
@@ -22,7 +24,7 @@ export interface IActionProps {
   onChangeInputValue: (field: TInputField, value: TFieldValue) => void;
   setError: (value: TErrorValue) => void;
   setSending: (value: boolean) => void;
-  setPageStep: (step: TStep) => void;
+  // setPageStep: (step: TStep) => void;
 }
 
 type IProps = IStateProps & IActionProps;
@@ -42,8 +44,9 @@ const RegisterForm = ({
   onChangeInputValue,
   setError,
   setSending,
-  setPageStep,
-}: IProps) => {
+}: // setPageStep,
+IProps) => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const setToken = useToken()[1];
 
   const validation: IValidation = {
@@ -89,7 +92,7 @@ const RegisterForm = ({
 
         if (res.data.code === 200) {
           setToken(res.data.payload.token);
-          setPageStep('chooseCloud');
+          setRedirect('/choose-cloud');
 
           return res.data.payload.token;
         }
@@ -107,6 +110,10 @@ const RegisterForm = ({
       },
     });
   };
+
+  if (redirect) {
+    return <InnerSetupRedirect to={redirect} />;
+  }
 
   return (
     <div className={styles.wrapper}>
@@ -161,9 +168,7 @@ const RegisterForm = ({
         <div className={styles['button-container']}>
           <Button text="next" onClick={handleSubmit} disabled={!full_name || !email || !password || !password2} />
         </div>
-        <button type="button" className={styles['other-forms-link']} onClick={() => setPageStep('login')}>
-          Have an account? Sign in
-        </button>
+        <Button text="Have an account? Sign in" type="innerLink" className={styles['other-forms-link']} href="/login" />
       </div>
     </div>
   );

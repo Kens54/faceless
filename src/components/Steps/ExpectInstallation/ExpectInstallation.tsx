@@ -1,8 +1,10 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import lottie from 'lottie-web';
-import { TSetupId, TStep } from '@src/types/reducers/page';
+import { TSetupId } from '@src/types/reducers/page';
 import { get } from '@common/fetch';
+import { TPage } from '@src/types/routing';
 import Private from '@components/Private';
+import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 import ExpectInstallationError from './ExpectInstallationError';
 import styles from './styles.module.scss';
 
@@ -10,13 +12,14 @@ export interface IStateProps {
   setupId: TSetupId;
 }
 
-export interface IActionProps {
-  setPageStep: (step: TStep) => void;
-}
+// export interface IActionProps {
+//   setPageStep: (step: TStep) => void;
+// }
 
-type TProps = IStateProps & IActionProps;
+type TProps = IStateProps;
 
-const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
+const ExpectInstallation = ({ setupId }: TProps) => {
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   const [tarrifId, setTarrifId] = useState<number | null>(null);
   const [error, setError] = useState(false);
   const loaderRef = useRef<HTMLDivElement>(null);
@@ -38,7 +41,7 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
             if (res.data.code === 200) {
               setTarrifId(res.data.payload.setup_id);
               if (res.data.payload.setup_status === 'started') {
-                setPageStep('done');
+                setRedirect('/done');
               } else if (res.data.payload.setup_status === 'error') {
                 setError(true);
               } else {
@@ -47,18 +50,18 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
               }
             }
           },
-          authErrorCallback: () => setPageStep('login'),
+          authErrorCallback: () => setRedirect('/login'),
         });
       }, time);
     },
-    [setupId, setPageStep],
+    [setupId],
   );
 
   useEffect(() => {
     if (!setupId) {
-      setPageStep('chooseProtocol');
+      setRedirect('/choose-protocol');
     }
-  }, [setupId, setPageStep]);
+  }, [setupId]);
 
   useEffect(() => {
     if (!error) {
@@ -77,6 +80,10 @@ const ExpectInstallation = ({ setupId, setPageStep }: TProps) => {
       }
     }
   }, [setupId, getSetupStatus, error]);
+
+  if (redirect) {
+    return <InnerSetupRedirect to={redirect} />;
+  }
 
   return (
     <Private>
