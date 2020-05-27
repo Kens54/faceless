@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/loginForm';
 import { TPage } from '@src/types/routing';
+import { TServerType } from '@src/types/reducers/page';
 import { IRegisterSuccessResponse } from '@src/types/api/register';
 import { IResponseError } from '@src/types/api/error';
 import { IMeSuccessResponse } from '@src/types/api/me';
@@ -11,7 +12,6 @@ import Input from '@components/Input';
 import Button from '@components/Button';
 import InnerSetupRedirect from '@components/InnerSetupRedirect';
 import styles from '@components/Form/styles.module.scss';
-import { TServerType } from '@src/types/reducers/page';
 
 export interface IStateProps {
   email: TFieldValue;

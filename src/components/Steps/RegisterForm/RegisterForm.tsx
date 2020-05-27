@@ -7,10 +7,10 @@ import { TPage } from '@src/types/routing';
 import { TServerType } from '@src/types/reducers/page';
 import { post } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
+import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 import Input from '@components/Input';
 import Button from '@components/Button';
 import styles from '@components/Form/styles.module.scss';
-import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 
 export interface IStateProps {
   full_name: TFieldValue;
