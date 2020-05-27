@@ -157,7 +157,7 @@ const RegisterForm = ({
         </div>
         <Button
           text="Have an account? Sign in"
-          type="innerLink"
+          type="button"
           className={styles['other-forms-link']}
           onClick={() => setProfilePageStep('login')}
         />

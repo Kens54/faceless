@@ -1,8 +1,8 @@
-import { IPageState } from '@src/types/reducers/profilePage';
+import { IProfilePageState } from '@src/types/reducers/profilePage';
 import { ProfilePageActionTypes } from '@src/constants/profilePage';
 import { TPageActions } from '@src/types/actions/profilePage';
 
-const initialState: IPageState = {
+const initialState: IProfilePageState = {
   step: 'profile',
 };
 
