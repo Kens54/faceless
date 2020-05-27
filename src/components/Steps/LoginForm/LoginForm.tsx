@@ -9,14 +9,16 @@ import { post, get } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
 import Input from '@components/Input';
 import Button from '@components/Button';
-import styles from '@components/Form/styles.module.scss';
 import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
+import styles from '@components/Form/styles.module.scss';
+import { TServerType } from '@src/types/reducers/page';
 
 export interface IStateProps {
   email: TFieldValue;
   password: TFieldValue;
   sending: boolean;
   error: TErrorValue;
+  serverType: TServerType;
 }
 
 export interface IActionProps {
@@ -34,7 +36,7 @@ interface IValidation {
   };
 }
 
-const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSending }: IProps) => {
+const LoginForm = ({ email, password, error, serverType, onChangeInputValue, setError, setSending }: IProps) => {
   const [redirect, setRedirect] = useState<TPage | null>(null);
   const setToken = useToken()[1];
 
@@ -83,8 +85,10 @@ const LoginForm = ({ email, password, error, onChangeInputValue, setError, setSe
               if (meRes.data.code === 200) {
                 if (meRes.data.payload.payment_type === 'card') {
                   setRedirect('/choose-protocol');
+                } else if (serverType === 'faceless') {
+                  setRedirect('/tarrifs');
                 } else {
-                  setRedirect('/choose-auth');
+                  setRedirect('/choose-cloud');
                 }
               }
             },

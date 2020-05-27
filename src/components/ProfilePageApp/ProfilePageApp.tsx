@@ -1,13 +1,13 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '@src/store/configStore';
-import ProfilePage from '@components/ProfilePage';
+import ProfilePageWithAuth from '@components/ProfilePageWithAuth';
 import '../../assets/styles/style.scss';
 
 const ProfilePageApp = () => {
   return (
     <Provider store={store}>
-      <ProfilePage />
+      <ProfilePageWithAuth />
     </Provider>
   );
 };

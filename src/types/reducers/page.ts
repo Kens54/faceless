@@ -13,9 +13,11 @@ export type TStep =
   | 'done';
 export type TChoosedCloud = TClouds | null;
 export type TSetupId = number | null;
+export type TServerType = 'faceless' | 'existing' | null;
 
 export interface IPageState {
   step: TStep;
   choosedCloud: TChoosedCloud;
   setupId: TSetupId;
+  serverType: TServerType;
 }

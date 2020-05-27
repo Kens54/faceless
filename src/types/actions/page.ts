@@ -1,7 +1,7 @@
 import { PageActionTypes } from '@constants/page';
-import { TStep, TChoosedCloud, TSetupId } from '@src/types/reducers/page';
+import { TStep, TChoosedCloud, TSetupId, TServerType } from '@src/types/reducers/page';
 
-export type TPageActions = ISetStepAction | ISetChoosedCloud | ISetSetupId;
+export type TPageActions = ISetStepAction | ISetChoosedCloud | ISetSetupId | ISetServerType;
 
 export interface ISetStepAction {
   type: PageActionTypes.SET_STEP;
@@ -16,4 +16,9 @@ export interface ISetChoosedCloud {
 export interface ISetSetupId {
   type: PageActionTypes.SET_SETUP_ID;
   payload: TSetupId;
+}
+
+export interface ISetServerType {
+  type: PageActionTypes.SET_SERVER_TYPE;
+  payload: TServerType;
 }

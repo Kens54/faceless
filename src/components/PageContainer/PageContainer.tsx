@@ -1,5 +1,5 @@
 import React from 'react';
-// import { getSearchParameter } from '@common/getSearchParameter';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import StartStep from '@components/Steps/StartStep';
 import LoginForm from '@components/Steps/LoginForm';
 import RegisterForm from '@components/Steps/RegisterForm';
@@ -10,7 +10,7 @@ import Plans from '@components/Steps/Plans';
 import ChooseProtocol from '@components/Steps/ChooseProtocol';
 import ExpectInstallation from '@components/Steps/ExpectInstallation';
 import Done from '@components/Steps/Done';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import InstructionsStep from '../Steps/InstructionsStep';
 
 const PageContainer = () => {
   // let pageStep = step;
@@ -84,6 +84,9 @@ const PageContainer = () => {
         </Route>
         <Route path="/set-up/done">
           <Done />
+        </Route>
+        <Route path="/set-up/instructions">
+          <InstructionsStep />
         </Route>
       </Switch>
     </Router>

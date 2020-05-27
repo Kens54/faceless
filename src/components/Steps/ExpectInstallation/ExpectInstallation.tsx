@@ -3,7 +3,7 @@ import lottie from 'lottie-web';
 import { TSetupId } from '@src/types/reducers/page';
 import { get } from '@common/fetch';
 import { TPage } from '@src/types/routing';
-import Private from '@components/Private';
+import Private from '@src/HOCs/Private';
 import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
 import ExpectInstallationError from './ExpectInstallationError';
 import styles from './styles.module.scss';
@@ -85,18 +85,14 @@ const ExpectInstallation = ({ setupId }: TProps) => {
     return <InnerSetupRedirect to={redirect} />;
   }
 
-  return (
-    <Private>
-      {!error ? (
-        <div className={styles.wrapper}>
-          <div ref={loaderRef} className={styles.loader} />
-          <h2 className={styles.title}>Expect installation</h2>
-        </div>
-      ) : (
-        <ExpectInstallationError setupId={tarrifId} setError={setError} />
-      )}
-    </Private>
+  return !error ? (
+    <div className={styles.wrapper}>
+      <div ref={loaderRef} className={styles.loader} />
+      <h2 className={styles.title}>Expect installation</h2>
+    </div>
+  ) : (
+    <ExpectInstallationError setupId={tarrifId} setError={setError} />
   );
 };
 
-export default ExpectInstallation;
+export default Private(ExpectInstallation);

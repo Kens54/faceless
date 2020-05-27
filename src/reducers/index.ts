@@ -4,10 +4,12 @@ import { page } from './page';
 import { registerForm } from './registerForm';
 import { loginForm } from './loginForm';
 import { api } from './api';
+import { profilePage } from './profilePage';
 
 export const rootReducers = combineReducers<IStoreState>({
   page,
   registerForm,
   loginForm,
   api,
+  profilePage,
 });

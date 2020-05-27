@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { IStoreState } from '@src/types/store';
 // import { setPageStep } from '@src/actions/page';
 // import { TStep } from '@src/types/reducers/page';
+import Private from '@src/HOCs/Private';
 import ChooseAuth, { IStateProps } from './ChooseAuth';
 
 const mapStateToProps = (state: IStoreState): IStateProps => ({
@@ -13,4 +14,4 @@ const mapStateToProps = (state: IStoreState): IStateProps => ({
 //   setPageStep: (step: TStep) => dispatch(setPageStep(step)),
 // });
 
-export default connect(mapStateToProps)(ChooseAuth);
+export default Private(connect(mapStateToProps)(ChooseAuth));

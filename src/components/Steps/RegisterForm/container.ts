@@ -14,6 +14,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => ({
   password2: state.registerForm.password2,
   sending: state.registerForm.sending,
   error: state.registerForm.error,
+  serverType: state.page.serverType,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): IActionProps => ({

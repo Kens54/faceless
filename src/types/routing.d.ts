@@ -8,4 +8,5 @@ export type TPage =
   | '/tarrifs'
   | '/choose-protocol'
   | '/expect-installation'
-  | '/done';
+  | '/done'
+  | '/instructions';

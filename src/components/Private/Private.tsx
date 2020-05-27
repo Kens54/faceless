@@ -10,10 +10,23 @@ interface IComponentProps {
 type TProps = IComponentProps;
 
 const Private = ({ children }: TProps) => {
+  const [loading, setLoading] = useState<boolean>(true);
   const [redirect, setRedirect] = useState<TPage | null>(null);
   useEffect(() => {
-    get({ method: '/me', authErrorCallback: () => setRedirect('/login') });
+    get({
+      method: '/me',
+      authErrorCallback: () => {
+        setRedirect('/login');
+      },
+      finallyCallback: () => {
+        setLoading(false);
+      },
+    });
   }, []);
+
+  if (loading) {
+    return null;
+  }
 
   if (redirect) {
     return <InnerSetupRedirect to={redirect} />;

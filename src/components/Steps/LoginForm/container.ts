@@ -12,6 +12,7 @@ const mapStateToProps = (state: IStoreState): IStateProps => ({
   password: state.registerForm.password,
   sending: state.registerForm.sending,
   error: state.registerForm.error,
+  serverType: state.page.serverType
 });
 
 const mapDispatchToProps = (dispatch: Dispatch): IActionProps => ({
