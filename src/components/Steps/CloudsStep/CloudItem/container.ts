@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
-import { TClouds, TStep } from '@src/types/reducers/page';
-import { setChoosedCloud, setPageStep } from '@actions/page';
+import { TClouds } from '@src/types/reducers/page';
+import { setChoosedCloud } from '@actions/page';
 import CloudItem, { IActionProps } from './CloudItem';
 
 const mapDispatchToProps = (dispatch: Dispatch): IActionProps => ({
   chooseCloud: (cloud: TClouds) => dispatch(setChoosedCloud(cloud)),
-  setPageStep: (step: TStep) => dispatch(setPageStep(step)),
+  // setPageStep: (step: TStep) => dispatch(setPageStep(step)),
 });
 
 export default connect(null, mapDispatchToProps)(CloudItem);

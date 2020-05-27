@@ -2,8 +2,8 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { ISuccessRefreshTokenResponse } from '@src/types/api/refresh_token';
 // import { useToken } from '@hooks/useToken';
 
-const API: string =
-  process.env.NODE_ENV === 'development'
+export const API: string =
+  process.env.NODE_ENV !== 'development'
     ? 'http://faceless-api.service.faceless-staging.consul'
     : 'https://api.faceless.me';
 
@@ -15,6 +15,7 @@ interface IGetParams {
   authErrorCallback?: (error?: any) => void;
   successCallback?: (value: AxiosResponse) => void;
   errorCallback?: (error: any) => void;
+  finallyCallback?: () => void;
 }
 
 interface IPostParams {
@@ -24,6 +25,7 @@ interface IPostParams {
   authErrorCallback?: (error?: any) => void;
   successCallback?: (value: AxiosResponse) => void;
   errorCallback?: (error: any) => void;
+  finallyCallback?: (value: any) => void;
 }
 
 // export const get = (method: string, options?: AxiosRequestConfig): Promise<AxiosResponse> => {
@@ -58,7 +60,14 @@ const refreshToken = async (authErrorCallback?: () => void, successCallback?: ()
     });
 };
 
-export const get = async ({ method, options = {}, authErrorCallback, successCallback, errorCallback }: IGetParams) => {
+export const get = async ({
+  method,
+  options = {},
+  authErrorCallback,
+  successCallback,
+  errorCallback,
+  finallyCallback,
+}: IGetParams) => {
   const localstorageToken = window.localStorage.getItem('token');
   const token = localstorageToken ? JSON.parse(localstorageToken) : null;
 
@@ -90,6 +99,10 @@ export const get = async ({ method, options = {}, authErrorCallback, successCall
     } else if (errorCallback) {
       errorCallback(error);
     }
+  }
+
+  if (finallyCallback) {
+    finallyCallback();
   }
 };
 

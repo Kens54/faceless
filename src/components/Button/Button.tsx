@@ -1,7 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import CSS from 'csstype';
+import { TPage } from '@src/types/routing';
 import { TButtonColor, TButtonType } from '@src/types/components/button';
+import { SET_UP_PAGE_PATH } from '@src/constants/routing';
 import styles from './styles.module.scss';
 
 interface IComponentProps {
@@ -9,9 +12,10 @@ interface IComponentProps {
   color?: TButtonColor;
   type?: TButtonType;
   disabled?: boolean;
-  href?: string;
+  href?: TPage | '/profile';
   onClick?: () => void;
   style?: CSS.Properties;
+  className?: string;
 }
 
 type IProps = IComponentProps;
@@ -21,17 +25,26 @@ const Button = ({
   onClick,
   color = 'green',
   type = 'button',
-  href = '',
+  href = '/',
   disabled = false,
   style = {},
+  className,
 }: IProps) => {
-  const buttonClasses = classNames(styles.button, styles[`button--${color}`]);
+  const buttonClasses = className || classNames(styles.button, styles[`button--${color}`]);
 
   if (type === 'link') {
     return (
       <a className={buttonClasses} href={href} onClick={onClick} style={style}>
         {text}
       </a>
+    );
+  }
+
+  if (type === 'innerLink') {
+    return (
+      <Link className={buttonClasses} to={`${SET_UP_PAGE_PATH}${href}`} style={style} onClick={onClick}>
+        {text}
+      </Link>
     );
   }
 

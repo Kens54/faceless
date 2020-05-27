@@ -6,6 +6,7 @@ const initialState: IPageState = {
   step: 'start',
   choosedCloud: 'aws',
   setupId: null,
+  serverType: 'faceless',
 };
 
 export const page = (state = initialState, action: TPageActions) => {
@@ -16,6 +17,8 @@ export const page = (state = initialState, action: TPageActions) => {
       return { ...state, choosedCloud: action.payload };
     case PageActionTypes.SET_SETUP_ID:
       return { ...state, setupId: action.payload };
+    case PageActionTypes.SET_SERVER_TYPE:
+      return { ...state, serverType: action.payload };
     default:
       return { ...state };
   }

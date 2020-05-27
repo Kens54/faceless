@@ -1,45 +1,82 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
 import lottie from 'lottie-web';
 import { get } from '@common/fetch';
-import { TStep } from '@src/types/reducers/page';
+import { TPage } from '@src/types/routing';
+import { TServerType } from '@src/types/reducers/page';
+import { TSetupStatus } from '@src/types/api/setup-status';
+import { useLocalStorage } from '@src/hooks/useLocalStorage';
+import { LocalStorageKeys } from '@src/constants/localStorageKeys';
 import { IMeSuccessResponse, IMeFailedResponse } from '@src/types/api/me';
-import Button from '@components/Button';
+import { ISuccessMeVpnsRequest } from '@src/types/api/me-vpns';
+import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
+import StepContent from './StepContent';
 import styles from './styles.module.scss';
 
 export interface IActionProps {
-  setPageStep: (step: TStep) => void;
+  setServerType: (serverType: TServerType) => void;
+  setSetupId: (setupId: number) => void;
 }
 
 type TProps = IActionProps;
 
-const StartStep = ({ setPageStep }: TProps) => {
+const StartStep = ({ setServerType, setSetupId }: TProps) => {
   const [loading, setLoading] = useState<boolean>(true);
+  const [nextStep, setNextStep] = useState<'auth' | 'buy' | 'protocol' | null>(null);
+  const [redirect, setRedirect] = useState<TPage | null>(null);
+  const [usedOurResources, setUsedOurResources] = useState<boolean | null>(null);
+  const [setupStatus, setSetupStatus] = useState<TSetupStatus>('');
   const loaderRef = useRef<HTMLDivElement>(null);
+  const setUseOurResources = useLocalStorage(LocalStorageKeys.USE_OUR_RESOURCES, true)[1];
+  const setCredentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[1];
 
   useEffect(() => {
     get({
       method: '/me',
       successCallback: (res: AxiosResponse<IMeSuccessResponse>) => {
+        setLoading(false);
+
         const data = res.data.payload;
         if (res.data.code === 200) {
           if (data.payment_type === 'card' && data.expires_in > 0) {
-            setPageStep('chooseProtocol');
+            setNextStep('protocol');
           } else {
-            setPageStep('tarrifs');
+            setNextStep('buy');
           }
         }
       },
       errorCallback: (error: AxiosError<IMeFailedResponse>) => {
+        setLoading(false);
         if (error.response) {
-          setPageStep('chooseAuth');
+          setNextStep('auth');
         }
       },
       authErrorCallback: () => {
         setLoading(false);
+        setNextStep('auth');
       },
     });
-  }, [setPageStep]);
+
+    get({
+      method: '/me/vpns',
+      successCallback: (res: AxiosResponse<ISuccessMeVpnsRequest>) => {
+        const list = res.data.payload;
+
+        // let ourResourcesSetup = [];
+        // let cloudSetup = [];
+
+        list.every(item => {
+          if (item.setup_status === 'started' || item.setup_status === 'starting') {
+            setSetupStatus(item.setup_status);
+            setUsedOurResources(item.used_our_resources);
+            setSetupId(item.id);
+            return false;
+          }
+          return true;
+        });
+      },
+    });
+  }, [setSetupId]);
 
   useEffect(() => {
     if (loading && loaderRef.current !== null) {
@@ -53,16 +90,60 @@ const StartStep = ({ setPageStep }: TProps) => {
     }
   }, [loading]);
 
+  const handleClickNextStep = useCallback(
+    (type: TServerType) => {
+      setServerType(type);
+
+      if (nextStep === 'auth') {
+        setRedirect('/login');
+      } else if (nextStep === 'buy') {
+        if (type === 'faceless') {
+          setRedirect('/tarrifs');
+          setCredentionals(null);
+          setUseOurResources(true);
+        } else if (type === 'existing') {
+          setRedirect('/choose-cloud');
+        }
+      } else if (nextStep === 'protocol') {
+        setRedirect('/choose-protocol');
+      }
+    },
+    [nextStep, setServerType, setCredentionals, setUseOurResources],
+  );
+
+  if (redirect) {
+    return <InnerSetupRedirect to={redirect} />;
+  }
+
   return (
     <div className={styles.wrapper}>
       {loading ? (
         <div ref={loaderRef} className={styles.loader} />
       ) : (
-        <>
-          <h2 className={styles.title}>Set up vpn on your server</h2>
-          <p className={styles.description}>Online anonymity</p>
-          <Button text="Choose cloud" onClick={() => setPageStep('login')} />
-        </>
+        <StepContent
+          setupStatus={setupStatus}
+          onClickFaceless={() => handleClickNextStep('faceless')}
+          disableFacelessButton={usedOurResources === false}
+        />
+        // <>
+        //   <h2 className={styles.title}>Set up vpn on your server</h2>
+        //   <p className={styles.description}>Online anonymity</p>
+        //   <div className={styles['button-container']}>
+        //     <Button
+        //       type="button"
+        //       text="Start with faceless"
+        //       disabled={usedOurResources === false}
+        //       onClick={() => handleClickNextStep('faceless')}
+        //     />
+        //   </div>
+        //   {/* Выбор облака */}
+        //   {/* <div className={styles['middle-text']}>or with</div>
+        //   <Button
+        //     type="button"
+        //     text="Existing server"
+        //     disabled={usedOurResources === true}
+        //     onClick={() => handleClickNextStep('existing')}
+        //   /> */}
       )}
     </div>
   );

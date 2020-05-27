@@ -1,21 +1,36 @@
-import React, { useEffect } from 'react';
-import { TStep } from '@src/types/reducers/page';
+import React, { useState, useEffect } from 'react';
 import { get } from '@common/fetch';
-
-export interface IActionProps {
-  setPageStep: (step: TStep) => void;
-}
+import { TPage } from '@src/types/routing';
+import InnerSetupRedirect from '../InnerSetupRedirect';
 
 interface IComponentProps {
   children: React.ReactNode;
 }
 
-type TProps = IActionProps & IComponentProps;
+type TProps = IComponentProps;
 
-const Private = ({ children, setPageStep }: TProps) => {
+const Private = ({ children }: TProps) => {
+  const [loading, setLoading] = useState<boolean>(true);
+  const [redirect, setRedirect] = useState<TPage | null>(null);
   useEffect(() => {
-    get({ method: '/me', authErrorCallback: () => setPageStep('login') });
-  }, [setPageStep]);
+    get({
+      method: '/me',
+      authErrorCallback: () => {
+        setRedirect('/login');
+      },
+      finallyCallback: () => {
+        setLoading(false);
+      },
+    });
+  }, []);
+
+  if (loading) {
+    return null;
+  }
+
+  if (redirect) {
+    return <InnerSetupRedirect to={redirect} />;
+  }
 
   return <>{children}</>;
 };
