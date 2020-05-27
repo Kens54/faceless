@@ -1,13 +1,13 @@
 import React from 'react';
 import { AxiosResponse, AxiosError } from 'axios';
+import { useToken } from '@hooks/useToken';
 import { TFieldValue, TErrorValue, TInputField } from '@src/types/reducers/loginForm';
+import { TProfilePageStep } from '@src/types/reducers/profilePage';
 import { IRegisterSuccessResponse } from '@src/types/api/register';
 import { IResponseError } from '@src/types/api/error';
 import { post } from '@common/fetch';
-import { useToken } from '@hooks/useToken';
 import Input from '@components/Input';
 import Button from '@components/Button';
-import { TProfilePageStep } from '@src/types/reducers/profilePage';
 import styles from '@components/Form/styles.module.scss';
 
 export interface IStateProps {
