@@ -9,7 +9,7 @@ import { post, get } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
 import Input from '@components/Input';
 import Button from '@components/Button';
-import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
+import InnerSetupRedirect from '@components/InnerSetupRedirect';
 import styles from '@components/Form/styles.module.scss';
 import { TServerType } from '@src/types/reducers/page';
 
