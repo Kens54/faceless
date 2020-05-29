@@ -3,6 +3,7 @@ import { TSetupStatus } from './setup-status';
 export interface ISuccessMeVpnIdRequest {
   code: number;
   payload: {
+    complete_percents: number;
     created_at: Date;
     id: number;
     last_action: string;
