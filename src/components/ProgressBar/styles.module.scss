@@ -1,0 +1,25 @@
+.bar {
+  width: 380px;
+  padding: 4px;
+  border: 3px solid #4fc1d3;
+  border-radius: 20px;
+
+  @media (max-width: 470px) {
+    width: 300px;
+  }
+}
+
+.progress {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 26px;
+  padding: 0 12px;
+  background-color: #4fc1d3;
+  border-radius: 13px;
+}
+
+.percents {
+  font-size: 18px;
+  color: #ffffff;
+}
