@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { AxiosResponse } from 'axios';
-import Slider from 'react-slick';
 import { TTariffsDataState } from '@src/types/reducers/api';
 import { ISuccessTariffsResponse } from '@src/types/api/tariffs';
 import { TButtonColor } from '@src/types/components/button';
@@ -33,17 +32,6 @@ const Plans = ({ tariffs, setTariffsData }: TProps) => {
     });
   }, [setTariffsData]);
 
-  const sliderSettings = {
-    className: 'slider variable-width custom-slider',
-    dots: true,
-    centerMode: true,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    infinite: false,
-    variableWidth: true,
-    arrows: false,
-  };
-
   if (tariffs === null) {
     return null;
   }
@@ -52,22 +40,20 @@ const Plans = ({ tariffs, setTariffsData }: TProps) => {
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Pricing plans</h2>
       <div className={styles['plans-list']}>
-        <Slider {...sliderSettings}>
-          {tariffs.map((plan, key) => {
-            const btnColor: TButtonColor = key % 2 === 0 ? 'green' : 'red';
+        {tariffs.map((plan, key) => {
+          const btnColor: TButtonColor = key % 2 === 0 ? 'green' : 'red';
 
-            return (
-              <Plan
-                key={plan.id}
-                id={plan.id}
-                title={plan.name}
-                price={plan.amount}
-                currency={plan.currency}
-                btnColor={btnColor}
-              />
-            );
-          })}
-        </Slider>
+          return (
+            <Plan
+              key={plan.id}
+              id={plan.id}
+              title={plan.name}
+              price={plan.amount}
+              currency={plan.currency}
+              btnColor={btnColor}
+            />
+          );
+        })}
       </div>
     </div>
   );
