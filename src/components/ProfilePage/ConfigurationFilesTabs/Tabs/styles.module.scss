@@ -1,0 +1,55 @@
+.container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 1px;
+}
+
+.tab {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 62px;
+  background-color: #e7f1f7;
+  border-radius: 6px 6px 0 0;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #fafafa;
+
+    & .title {
+      text-decoration: none;
+    }
+  }
+
+  &--active {
+    background-color: #ffffff !important;
+    cursor: auto;
+
+    & .title {
+      text-decoration: none;
+    }
+  }
+}
+
+.icon {
+  display: block;
+  margin-right: 12px;
+
+  @media (max-width: 725px) {
+    margin-right: 0;
+  }
+}
+
+.title {
+  font-size: 16px;
+  color: #7dc0d1;
+  text-decoration: underline;
+
+  @media (max-width: 725px) {
+    display: none;
+
+    &--SSH {
+      display: block;
+    }
+  }
+}
