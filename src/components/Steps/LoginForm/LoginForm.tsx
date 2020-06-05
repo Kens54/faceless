@@ -6,6 +6,7 @@ import { TServerType } from '@src/types/reducers/page';
 import { IRegisterSuccessResponse } from '@src/types/api/register';
 import { IResponseError } from '@src/types/api/error';
 import { IMeSuccessResponse } from '@src/types/api/me';
+import { ISuccessMeVpnsRequest } from '@src/types/api/me-vpns';
 import { post, get } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
 import Input from '@components/Input';
@@ -54,6 +55,23 @@ const LoginForm = ({ email, password, error, serverType, onChangeInputValue, set
     onChangeInputValue(field, value);
   };
 
+  const getMe = () => {
+    get({
+      method: '/me',
+      successCallback: (meRes: AxiosResponse<IMeSuccessResponse>) => {
+        if (meRes.data.code === 200) {
+          if (meRes.data.payload.payment_type === 'card') {
+            setRedirect('/choose-protocol');
+          } else if (serverType === 'faceless') {
+            setRedirect('/tarrifs');
+          } else {
+            setRedirect('/choose-cloud');
+          }
+        }
+      },
+    });
+  };
+
   const handleSubmit = () => {
     setSending(true);
 
@@ -80,16 +98,22 @@ const LoginForm = ({ email, password, error, serverType, onChangeInputValue, set
           setToken(token);
 
           get({
-            method: '/me',
-            successCallback: (meRes: AxiosResponse<IMeSuccessResponse>) => {
-              if (meRes.data.code === 200) {
-                if (meRes.data.payload.payment_type === 'card') {
-                  setRedirect('/choose-protocol');
-                } else if (serverType === 'faceless') {
-                  setRedirect('/tarrifs');
-                } else {
-                  setRedirect('/choose-cloud');
+            method: '/me/vpns',
+            successCallback: (vpnsRes: AxiosResponse<ISuccessMeVpnsRequest>) => {
+              const list = vpnsRes.data.payload;
+              let isRedirected = false;
+
+              list.every(item => {
+                if (item.setup_status === 'started') {
+                  setRedirect('/instructions');
+                  isRedirected = true;
+                  return false;
                 }
+                return true;
+              });
+
+              if (!isRedirected) {
+                getMe();
               }
             },
           });

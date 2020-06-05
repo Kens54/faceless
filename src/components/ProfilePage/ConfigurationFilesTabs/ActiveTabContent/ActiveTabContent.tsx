@@ -1,8 +1,8 @@
 import React from 'react';
 import { TCatygoryTitle, ISortedLinks } from '../types';
-import styles from './styles.module.scss';
 import TextPlatformContent from '../PlatformContent/TextPlatformContent';
 import LinksPlatformContent from '../PlatformContent/LinksPlatformContent';
+import styles from './styles.module.scss';
 
 interface IComponentProps {
   sortedLinks: ISortedLinks[];
@@ -23,7 +23,7 @@ const ActiveTabContent = ({ activeTab, sortedLinks }: TProps) => {
           return (
             <TextPlatformContent
               key={title}
-              text="Используйте SHH-ключ, чтобы убедиться в прозрачности нашего сервиса и проверить работу своего личного сервера."
+              text="Use the SHH-key to verify the transparency of our service and check the operation of your personal server."
               links={links}
             />
           );

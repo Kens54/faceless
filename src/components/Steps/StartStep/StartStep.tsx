@@ -125,25 +125,6 @@ const StartStep = ({ setServerType, setSetupId }: TProps) => {
           onClickFaceless={() => handleClickNextStep('faceless')}
           disableFacelessButton={usedOurResources === false}
         />
-        // <>
-        //   <h2 className={styles.title}>Set up vpn on your server</h2>
-        //   <p className={styles.description}>Online anonymity</p>
-        //   <div className={styles['button-container']}>
-        //     <Button
-        //       type="button"
-        //       text="Start with faceless"
-        //       disabled={usedOurResources === false}
-        //       onClick={() => handleClickNextStep('faceless')}
-        //     />
-        //   </div>
-        //   {/* Выбор облака */}
-        //   {/* <div className={styles['middle-text']}>or with</div>
-        //   <Button
-        //     type="button"
-        //     text="Existing server"
-        //     disabled={usedOurResources === true}
-        //     onClick={() => handleClickNextStep('existing')}
-        //   /> */}
       )}
     </div>
   );

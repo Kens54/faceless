@@ -5,7 +5,7 @@ export interface ILink {
   apiLink: string;
   linkName: string;
   fileName: string;
-  ext: 'png' | 'txt' | 'conf' | 'pem' | 'p12' | 'ovpn' | 'mobileconfig';
+  ext: string;
 }
 
 export interface ISortedLinks {
