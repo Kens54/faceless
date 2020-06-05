@@ -1,6 +1,5 @@
 .wrapper {
-  margin-top: 60px;
-  margin-bottom: 50px;
+  margin: 60px 15px 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,15 +22,25 @@
 
 .plans-list {
   display: flex;
-  justify-content: center;
-  max-width: 919px;
-  width: 100%;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 1000px;
+  margin: 0 auto;
 
-  & :global(.slick-track) {
-    min-width: 340px;
+  min-width: 340px;
 
-    @media (max-width: 959px) {
-      min-width: 235px;
-    }
+  @media (max-width: 1041px) {
+    width: 738px;
+  }
+
+  @media (max-width: 739px) {
+    width: 500px;
+  }
+
+  @media (max-width: 570px) {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: auto;
   }
 }
