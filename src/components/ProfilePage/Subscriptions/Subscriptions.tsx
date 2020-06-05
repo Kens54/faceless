@@ -39,7 +39,7 @@ const Subscriptions = ({ subscriptions }: TProps) => {
             )}
             <div className={`${styles['table-item']} ${styles['table-item--4']}`}>{status}</div>
             <div className={`${styles['table-item']} ${styles['table-item--5']}`}>
-              <a href="/set-up/tarrifs" className={styles.link}>
+              <a href="/set-up/tariffs" className={styles.link}>
                 Edit
               </a>
             </div>

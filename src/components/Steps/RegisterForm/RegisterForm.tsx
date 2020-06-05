@@ -95,7 +95,7 @@ const RegisterForm = ({
         if (res.data.code === 200) {
           setToken(res.data.payload.token);
           if (serverType === 'faceless') {
-            setRedirect('/tarrifs');
+            setRedirect('/tariffs');
           } else {
             setRedirect('/choose-cloud');
           }

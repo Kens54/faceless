@@ -2,12 +2,12 @@ import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
 import { ISuccessRefreshTokenResponse } from '@src/types/api/refresh_token';
 // import { useToken } from '@hooks/useToken';
 
-export const API: string =
-  process.env.NODE_ENV === 'development'
-    ? 'http://faceless-api.service.faceless-staging.consul'
-    : 'https://api.faceless.me';
+// export const API: string =
+//   process.env.NODE_ENV === 'development'
+//     ? 'http://faceless-api.service.faceless-staging.consul'
+//     : 'https://api.faceless.me';
 
-// const API: string = 'http://faceless-api.service.faceless-staging.consul';
+const API: string = 'https://api.faceless.me';
 
 interface IGetParams {
   method: string;

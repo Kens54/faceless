@@ -5,7 +5,7 @@ export type TPage =
   | '/choose-cloud'
   | '/choose-auth'
   | '/aws-credentials'
-  | '/tarrifs'
+  | '/tariffs'
   | '/choose-protocol'
   | '/expect-installation'
   | '/done'

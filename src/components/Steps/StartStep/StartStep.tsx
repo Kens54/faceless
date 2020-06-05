@@ -98,7 +98,7 @@ const StartStep = ({ setServerType, setSetupId }: TProps) => {
         setRedirect('/login');
       } else if (nextStep === 'buy') {
         if (type === 'faceless') {
-          setRedirect('/tarrifs');
+          setRedirect('/tariffs');
           setCredentionals(null);
           setUseOurResources(true);
         } else if (type === 'existing') {

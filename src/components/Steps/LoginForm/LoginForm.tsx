@@ -63,7 +63,7 @@ const LoginForm = ({ email, password, error, serverType, onChangeInputValue, set
           if (meRes.data.payload.payment_type === 'card') {
             setRedirect('/choose-protocol');
           } else if (serverType === 'faceless') {
-            setRedirect('/tarrifs');
+            setRedirect('/tariffs');
           } else {
             setRedirect('/choose-cloud');
           }

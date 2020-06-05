@@ -48,7 +48,7 @@ const ChooseAuth = ({ choosedCloud, error }: TProps) => {
             onClick={() => {
               setUseOurResources(true);
               setCredentionals(null);
-              setRedirect('/tarrifs');
+              setRedirect('/tariffs');
             }}
           />
         </div>

@@ -40,7 +40,7 @@ const Form = () => {
         aws_access_key: keyId,
         aws_secret_key: secretKey,
       });
-      setRedirect('/tarrifs');
+      setRedirect('/tariffs');
     }
   };
 

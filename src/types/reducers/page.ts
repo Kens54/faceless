@@ -7,7 +7,7 @@ export type TStep =
   | 'chooseAuth'
   | 'chooseAuthError'
   | 'awsCredentials'
-  | 'tarrifs'
+  | 'tariffs'
   | 'chooseProtocol'
   | 'expectInstallation'
   | 'done';

@@ -18,9 +18,13 @@ export interface IActionProps {
   setTariffsData: (tariffs: TTariffsDataState) => void;
 }
 
-type TProps = IStateProps & IActionProps;
+interface IComponentProps {
+  error?: boolean;
+}
 
-const Plans = ({ tariffs, setTariffsData }: TProps) => {
+type TProps = IStateProps & IActionProps & IComponentProps;
+
+const Plans = ({ tariffs, error, setTariffsData }: TProps) => {
   useEffect(() => {
     get({
       method: '/billing/tariffs',
@@ -39,6 +43,7 @@ const Plans = ({ tariffs, setTariffsData }: TProps) => {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Pricing plans</h2>
+      {error && <div className={styles.error}>Your payment has been failed. Please try again</div>}
       <div className={styles['plans-list']}>
         {tariffs.map((plan, key) => {
           const btnColor: TButtonColor = key % 2 === 0 ? 'green' : 'red';
