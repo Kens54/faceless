@@ -6,11 +6,16 @@ interface IComponentProps {
   title: string;
   children: React.ReactNode;
   Button?: React.FunctionComponent;
+  withoutBackground?: boolean;
 }
 
 type TProps = IComponentProps;
 
-const Section = ({ title, children, Button }: TProps) => {
+const Section = ({ title, children, Button, withoutBackground }: TProps) => {
+  const contentClassNames = classNames(styles['content-container'], {
+    [styles['content-container--without-background']]: withoutBackground,
+  });
+
   const titleContainerClasses = classNames(styles['title-container'], {
     [styles['title-container--without-button']]: Boolean(!Button),
   });
@@ -21,7 +26,7 @@ const Section = ({ title, children, Button }: TProps) => {
         <h3 className={styles.title}>{title}</h3>
         {Button && <Button />}
       </div>
-      <div className={styles['content-container']}>{children}</div>
+      <div className={contentClassNames}>{children}</div>
     </section>
   );
 };

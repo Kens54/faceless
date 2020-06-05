@@ -13,7 +13,7 @@ import SectionButton from './SectionButton';
 import PersonalDataItem from './PersonalDataItem';
 import Subscriptions from './Subscriptions';
 import PaymentMethod from './PaymentMethod';
-import ConfigurationFiles from './ConfigurationFiles';
+import ConfigurationFilesTabs from './ConfigurationFilesTabs';
 import styles from './styles.module.scss';
 
 export interface IStateProps {
@@ -130,8 +130,9 @@ const ProfilePage = ({
         <Section
           title="Configuration files"
           Button={() => <SectionButton text="Instructions" icon="gear" href="/set-up/instructions" />}
+          withoutBackground
         >
-          <ConfigurationFiles configsLinks={configsLinks} setupId={setupId} />
+          <ConfigurationFilesTabs configsLinks={configsLinks} setupId={setupId} />
         </Section>
       )}
     </div>
