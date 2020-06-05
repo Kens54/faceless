@@ -6,7 +6,7 @@ const DoneStep = () => {
   return (
     <div className={styles.wrapper}>
       <h2 className={styles.title}>Done!</h2>
-      <Button type="link" href="/instructions" text="Continue" />
+      <Button type="innerLink" href="/instructions" text="Continue" />
     </div>
   );
 };
