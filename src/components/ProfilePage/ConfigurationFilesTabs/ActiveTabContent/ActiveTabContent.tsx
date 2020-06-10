@@ -23,7 +23,7 @@ const ActiveTabContent = ({ activeTab, sortedLinks }: TProps) => {
           return (
             <TextPlatformContent
               key={title}
-              text="Use the SHH-key to verify the transparency of our service and check the operation of your personal server."
+              text="Use the SSH-key to verify the transparency of our service and check the operation of your personal server."
               links={links}
             />
           );

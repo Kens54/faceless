@@ -15,8 +15,7 @@ const LinksPlatformContent = ({ links }: TProps) => {
       {links.map(link => {
         return (
           <div key={link.apiLink} className={styles['link-container']}>
-            <div className={styles['link-name']}>{link.linkName}</div>
-            <FileLink link={link} />
+            <FileLink link={link} linkName={link.linkName} />
           </div>
         );
       })}
