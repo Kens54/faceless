@@ -35,20 +35,22 @@ const ConfigurationFilesTabs = ({ configsLinks, setupId }: TProps) => {
       ext,
     };
 
-    if (
-      item.includes('ipsec/p12') ||
-      item.includes('ipsec/p12pw') ||
-      item.includes('ipsec/cacert') ||
-      item.includes('ipsec/sswanconfig')
-    ) {
+    if (item.includes('openvpn')) {
       windowsLinks.links.push(link);
-    } else if (item.includes('macos/wireguard')) {
       macLinks.links.push(link);
-    } else if (item.includes('openvpn') || item.includes('wireguard.png')) {
       androidLinks.links.push(link);
-    } else if (item.includes('os/ikev2') || item.includes('ios/wireguard')) {
       iosLinks.links.push(link);
-    } else if (item.includes('ssh')) {
+    }
+
+    if (item.search(/(ipsec\/p12|ipsec\/p12pw|ipsec\/cacert|ipsec\/sswanconfig)/) > -1) {
+      windowsLinks.links.push(link);
+    } else if (item.search(/(macos\/wireguard)/) > -1) {
+      macLinks.links.push(link);
+    } else if (item.search(/(wireguard\.png)/) > -1) {
+      androidLinks.links.push(link);
+    } else if (item.search(/(os\/ikev2|ios\/wireguard)/) > -1) {
+      iosLinks.links.push(link);
+    } else if (item.search(/(ssh)/) > -1) {
       sshLinks.links.push(link);
     }
   });
