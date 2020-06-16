@@ -1,3 +1,8 @@
+.topPartDiv {
+  flex-grow: 2;
+  background-color: none;
+}
+
 .topMenu input,
 .topMenu span {
   display: none;
@@ -111,4 +116,12 @@
     /*transform: none;*/
     display: flex;
   }
+}
+
+.footerDivCont {
+  height: auto;
+}
+
+.footerShadowDivCont {
+  height: auto;
 }

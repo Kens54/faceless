@@ -25,6 +25,8 @@ html {
 // }
 
 body {
+  display: flex;
+  flex-direction: column;
   min-width: 320px;
   margin: 0;
   position: relative;
@@ -36,10 +38,6 @@ body {
   background-image: url('../img/page-bg.png');
   background-size: cover;
   overflow-x: hidden;
-}
-
-.topPartDiv {
-  background-color: none;
 }
 
 #set-up-page,
