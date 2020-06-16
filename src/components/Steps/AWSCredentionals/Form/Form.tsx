@@ -22,8 +22,8 @@ const Form = () => {
   const setCredentionals = useLocalStorage(LocalStorageKeys.CREDENTIONALS, null)[1];
 
   const regs = {
-    keyId: /(?<![A-Z0-9])[A-Z0-9]{20}(?![A-Z0-9])/g,
-    secretKey: /(?<![A-Za-z0-9/+=])[A-Za-z0-9/+=]{40}(?![A-Za-z0-9/+=])/g,
+    keyId: /[A-Z0-9]{20}(?![A-Z0-9])/g,
+    secretKey: /[A-Za-z0-9/+=]{40}(?![A-Za-z0-9/+=])/g,
   };
 
   const onSubmit = () => {
