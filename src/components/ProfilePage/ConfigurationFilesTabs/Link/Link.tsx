@@ -48,14 +48,23 @@ const Link = ({ link, linkName }: TProps) => {
       },
       successCallback: (res: AxiosResponse<any>) => {
         const { data } = res;
-        const virtualLink = document.createElement('a');
+
+        const isIos = window.navigator.userAgent.search(/(iPhone|iPad)/) > -1;
+
         const blob = responseType === 'blob' ? data : new Blob([data], { type: fileType });
+        const blobUrl = URL.createObjectURL(blob);
 
-        virtualLink.href = URL.createObjectURL(blob);
-        virtualLink.download = link.fileName;
-        virtualLink.click();
+        if (isIos || link.ext === 'png') {
+          window.open(blobUrl, '_blank');
+        } else {
+          const virtualLink = document.createElement('a');
 
-        URL.revokeObjectURL(virtualLink.href);
+          virtualLink.href = blobUrl;
+          virtualLink.download = link.fileName;
+          virtualLink.click();
+        }
+
+        URL.revokeObjectURL(blobUrl);
       },
     });
   };
