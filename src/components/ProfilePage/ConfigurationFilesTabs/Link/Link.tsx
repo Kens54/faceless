@@ -62,9 +62,8 @@ const Link = ({ link, linkName }: TProps) => {
           virtualLink.href = blobUrl;
           virtualLink.download = link.fileName;
           virtualLink.click();
+          URL.revokeObjectURL(blobUrl);
         }
-
-        URL.revokeObjectURL(blobUrl);
       },
     });
   };
