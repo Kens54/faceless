@@ -40,6 +40,38 @@ const Link = ({ link, linkName }: TProps) => {
   const fileType = getFileType();
   const responseType = getResponseType();
 
+  const openFileOnFrame = (blob: Blob): void => {
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+
+    reader.onload = () => {
+      const { result } = reader;
+      if (typeof result === 'string') {
+        const newWindow = window.open('');
+
+        if (newWindow) {
+          newWindow.onload = () => {
+            newWindow.document.write(
+              `<iframe width="100%" height="100%" src="${result}" style="border: none;"></iframe>`,
+            );
+          };
+        }
+
+        URL.revokeObjectURL(result);
+      }
+    };
+  };
+
+  const downloadFile = (blob: Blob): void => {
+    const blobUrl = URL.createObjectURL(blob);
+    const virtualLink = document.createElement('a');
+
+    virtualLink.href = blobUrl;
+    virtualLink.download = link.fileName;
+    virtualLink.click();
+    URL.revokeObjectURL(blobUrl);
+  };
+
   const handleClick = () => {
     get({
       method: link.apiLink,
@@ -52,17 +84,11 @@ const Link = ({ link, linkName }: TProps) => {
         const isIos = window.navigator.userAgent.search(/(iPhone|iPad)/) > -1;
 
         const blob = responseType === 'blob' ? data : new Blob([data], { type: fileType });
-        const blobUrl = URL.createObjectURL(blob);
 
         if (isIos || link.ext === 'png') {
-          window.open(blobUrl, '_blank');
+          openFileOnFrame(blob);
         } else {
-          const virtualLink = document.createElement('a');
-
-          virtualLink.href = blobUrl;
-          virtualLink.download = link.fileName;
-          virtualLink.click();
-          URL.revokeObjectURL(blobUrl);
+          downloadFile(blob);
         }
       },
     });
