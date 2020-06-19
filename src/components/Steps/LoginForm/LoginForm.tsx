@@ -9,9 +9,9 @@ import { IMeSuccessResponse } from '@src/types/api/me';
 import { ISuccessMeVpnsRequest } from '@src/types/api/me-vpns';
 import { post, get } from '@common/fetch';
 import { useToken } from '@hooks/useToken';
+import InnerSetupRedirect from '@components/InnerSetupRedirect';
 import Input from '@components/Input';
 import Button from '@components/Button';
-import InnerSetupRedirect from '@components/InnerSetupRedirect';
 import styles from '@components/Form/styles.module.scss';
 
 export interface IStateProps {
