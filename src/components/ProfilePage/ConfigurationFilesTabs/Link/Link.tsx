@@ -40,23 +40,19 @@ const Link = ({ link, linkName }: TProps) => {
   const fileType = getFileType();
   const responseType = getResponseType();
 
-  const openFileOnFrame = (blob: Blob): void => {
+  const isIos = window.navigator.userAgent.search(/(iPhone|iPad)/) > -1;
+
+  const openFileOnFileReader = (blob: Blob): void => {
     const reader = new FileReader();
     reader.readAsDataURL(blob);
 
     reader.onload = () => {
       const { result } = reader;
       if (typeof result === 'string') {
-        const newWindow = window.open('');
+        const virtualLink = document.createElement('a');
 
-        if (newWindow) {
-          newWindow.onload = () => {
-            newWindow.document.write(
-              `<iframe width="100%" height="100%" src="${result}" style="border: none;"></iframe>`,
-            );
-          };
-        }
-
+        virtualLink.href = result;
+        virtualLink.click();
         URL.revokeObjectURL(result);
       }
     };
@@ -67,8 +63,13 @@ const Link = ({ link, linkName }: TProps) => {
     const virtualLink = document.createElement('a');
 
     virtualLink.href = blobUrl;
-    virtualLink.download = link.fileName;
+    if (link.ext === 'png') {
+      virtualLink.target = '_blank';
+    } else {
+      virtualLink.download = link.fileName;
+    }
     virtualLink.click();
+
     URL.revokeObjectURL(blobUrl);
   };
 
@@ -81,12 +82,10 @@ const Link = ({ link, linkName }: TProps) => {
       successCallback: (res: AxiosResponse<any>) => {
         const { data } = res;
 
-        const isIos = window.navigator.userAgent.search(/(iPhone|iPad)/) > -1;
-
         const blob = responseType === 'blob' ? data : new Blob([data], { type: fileType });
 
-        if (isIos || link.ext === 'png') {
-          openFileOnFrame(blob);
+        if (isIos) {
+          openFileOnFileReader(blob);
         } else {
           downloadFile(blob);
         }
