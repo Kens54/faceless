@@ -8,6 +8,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     contentBase: baseWebpackConfig.externals.paths.dist,
     historyApiFallback: true,
     overlay: true,
+    // host: '192.168.31.226',
     port: 3000,
     proxy: {
       '/api/**': {
