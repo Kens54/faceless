@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useLocalStorage } from '@hooks/useLocalStorage';
 import { LocalStorageKeys } from '@constants/localStorageKeys';
 import { TPage } from '@src/types/routing';
-import Button from '@components/Button';
 import InnerSetupRedirect from '@src/components/InnerSetupRedirect';
+import Button from '@components/Button';
 import styles from './styles.module.scss';
 
 // export interface IActionProps {

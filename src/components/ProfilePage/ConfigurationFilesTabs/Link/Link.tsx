@@ -12,6 +12,15 @@ interface IComponentProps {
 type TProps = IComponentProps;
 
 const Link = ({ link, linkName }: TProps) => {
+  const getFileType = () => {
+    switch (link.ext) {
+      case 'ovpn':
+        return 'application/ovpn';
+      default:
+        return 'text/plain';
+    }
+  };
+
   const getResponseType = () => {
     switch (link.ext) {
       case 'png':
@@ -27,6 +36,8 @@ const Link = ({ link, linkName }: TProps) => {
         return 'json';
     }
   };
+
+  const fileType = getFileType();
 
   const responseType = getResponseType();
 
@@ -80,7 +91,7 @@ const Link = ({ link, linkName }: TProps) => {
       successCallback: (res: AxiosResponse<any>) => {
         const { data } = res;
 
-        const blob = responseType === 'blob' ? data : new Blob([data]);
+        const blob = responseType === 'blob' && link.ext !== 'ovpn' ? data : new Blob([data], { type: fileType });
 
         if (isIos) {
           downloadFileWithFileReader(blob);

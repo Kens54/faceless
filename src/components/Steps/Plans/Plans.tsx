@@ -7,8 +7,6 @@ import { get } from '@common/fetch';
 import Private from '@src/HOCs/Private';
 import Plan from './Plan';
 import styles from './styles.module.scss';
-import 'slick-carousel/slick/slick.css';
-import '@components/Slider/styles.scss';
 
 export interface IStateProps {
   tariffs: TTariffsDataState;
